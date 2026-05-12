@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - Kaprodi Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#7C3AED',
+                            blue: '#38BDF8',
+                            dark: '#0F172A',
+                            darker: '#0B1121'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-dark min-h-screen text-slate-200 flex" x-data="{ sidebarOpen: true }">
+
+    <!-- Sidebar -->
+    <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="glass-panel transition-all duration-300 flex flex-col fixed h-full z-20">
+        <div class="h-16 flex items-center justify-between px-4 border-b border-slate-700/50">
+            <div class="flex items-center gap-3 overflow-hidden" x-show="sidebarOpen">
+                <i data-lucide="compass" class="text-brand-purple w-8 h-8 flex-shrink-0"></i>
+                <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">COMPASS</span>
+            </div>
+            <div class="flex items-center justify-center w-full" x-show="!sidebarOpen">
+                <i data-lucide="compass" class="text-brand-purple w-8 h-8"></i>
+            </div>
+        </div>
+
+        <div class="p-4 flex flex-col gap-2 flex-1 overflow-y-auto">
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4" x-show="sidebarOpen">Menu Utama</p>
+            
+            <a href="dashboard-kaprodi.html" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-brand-purple/20 text-brand-purple border border-brand-purple/30 glow-primary transition-all">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Dashboard</span>
+            </a>
+            
+            <a href="dashboard-dosen.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="users" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Dosen Wali</span>
+            </a>
+
+            <a href="input-nilai.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="file-edit" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Input Nilai</span>
+            </a>
+
+            <a href="mata-kuliah.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="book-open" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Mata Kuliah</span>
+            </a>
+
+            <a href="rps.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="file-text" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Kelola RPS</span>
+            </a>
+            
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6" x-show="sidebarOpen">Settings</p>
+            <a href="settings.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="settings" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Admin Settings</span>
+            </a>
+        </div>
+
+        <div class="p-4 border-t border-slate-700/50">
+            <a href="index.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-400/10 transition-all">
+                <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main :class="sidebarOpen ? 'ml-64' : 'ml-20'" class="flex-1 transition-all duration-300 min-h-screen flex flex-col">
+        <!-- Topbar -->
+        <header class="h-16 glass-panel border-b border-slate-700/50 flex items-center justify-between px-6 sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <button @click="sidebarOpen = !sidebarOpen" class="text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 class="text-lg font-semibold hidden sm:block">Dashboard Perhitungan PLO - Kaprodi</h2>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="relative hidden md:block">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                    <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 bg-slate-900/50 border border-slate-700 rounded-full text-sm focus:outline-none focus:border-brand-purple w-64 text-slate-200">
+                </div>
+                <button class="relative text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-brand-dark"></span>
+                </button>
+                <div class="flex items-center gap-3 border-l border-slate-700 pl-6 cursor-pointer">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue flex items-center justify-center text-sm font-bold text-white shadow-lg">
+                        BR
+                    </div>
+                    <div class="hidden md:block">
+                        <p class="text-sm font-medium text-white">Dr. Berlian Lidiawaty</p>
+                        <p class="text-xs text-slate-400">Kaprodi Sistem Informasi</p>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 hidden md:block"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="p-6 md:p-8 flex-1 overflow-y-auto">
+            
+            <!-- Filters -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-1">Academic Overview</h3>
+                    <p class="text-sm text-slate-400">Monitor ketercapaian Program Learning Outcomes secara real-time.</p>
+                </div>
+                <div class="flex gap-3">
+                    <select class="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg focus:ring-brand-purple focus:border-brand-purple block w-full p-2.5">
+                        <option>Tahun: 2023/2024</option>
+                        <option>Tahun: 2024/2025</option>
+                    </select>
+                    <select class="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg focus:ring-brand-purple focus:border-brand-purple block w-full p-2.5">
+                        <option>Semester: Ganjil</option>
+                        <option>Semester: Genap</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Card 1 -->
+                <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-brand-purple/20 rounded-full blur-2xl group-hover:bg-brand-purple/40 transition-all"></div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-sm font-medium text-slate-400">Total Mahasiswa</p>
+                            <h4 class="text-3xl font-bold text-white mt-1">1,248</h4>
+                        </div>
+                        <div class="p-2 bg-brand-purple/20 rounded-lg text-brand-purple">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-emerald-400 flex items-center font-medium"><i data-lucide="trending-up" class="w-4 h-4 mr-1"></i> +12%</span>
+                        <span class="text-slate-500 ml-2">dari tahun lalu</span>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-brand-blue/20 rounded-full blur-2xl group-hover:bg-brand-blue/40 transition-all"></div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-sm font-medium text-slate-400">Rata-rata PLO</p>
+                            <h4 class="text-3xl font-bold text-white mt-1">62.8%</h4>
+                        </div>
+                        <div class="p-2 bg-brand-blue/20 rounded-lg text-brand-blue">
+                            <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-emerald-400 flex items-center font-medium"><i data-lucide="trending-up" class="w-4 h-4 mr-1"></i> 5.4%</span>
+                        <span class="text-slate-500 ml-2">vs target 60%</span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card rounded-2xl p-6 relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-sm font-medium text-slate-400">Mata Kuliah Aktif</p>
+                            <h4 class="text-3xl font-bold text-white mt-1">42</h4>
+                        </div>
+                        <div class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400">
+                            <i data-lucide="book-open" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-slate-400 font-medium">100% RPS disetujui</span>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-card rounded-2xl p-6 relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-sm font-medium text-slate-400">Dosen Aktif</p>
+                            <h4 class="text-3xl font-bold text-white mt-1">36</h4>
+                        </div>
+                        <div class="p-2 bg-amber-500/20 rounded-lg text-amber-400">
+                            <i data-lucide="user-check" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center text-sm">
+                        <span class="text-amber-400 flex items-center font-medium"><i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i> 3</span>
+                        <span class="text-slate-500 ml-2">belum input nilai</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Main Bar Chart -->
+                <div class="glass-card rounded-2xl p-6 lg:col-span-2">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-white">Ketercapaian PLO per Angkatan</h3>
+                        <button class="p-2 hover:bg-slate-800 rounded-lg transition-colors"><i data-lucide="more-horizontal" class="w-5 h-5 text-slate-400"></i></button>
+                    </div>
+                    <div class="h-72 w-full">
+                        <canvas id="ploChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Radar Chart -->
+                <div class="glass-card rounded-2xl p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-white">Distribusi Kompetensi</h3>
+                    </div>
+                    <div class="h-64 w-full flex justify-center">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div class="p-6 border-b border-slate-700/50 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-white">Top Mahasiswa (Nilai PLO Tertinggi)</h3>
+                    <a href="detail-mahasiswa.html" class="text-sm text-brand-blue hover:text-blue-400 font-medium">View All</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-slate-400">
+                        <thead class="text-xs text-slate-300 uppercase bg-slate-800/50">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 rounded-tl-lg">Nama Mahasiswa</th>
+                                <th scope="col" class="px-6 py-4">NIM</th>
+                                <th scope="col" class="px-6 py-4">Avg PLO</th>
+                                <th scope="col" class="px-6 py-4">Status</th>
+                                <th scope="col" class="px-6 py-4 text-right rounded-tr-lg">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors">
+                                <td class="px-6 py-4 font-medium text-white flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs">DI</div>
+                                    DIANA IFFATUL INSYIRAH
+                                </td>
+                                <td class="px-6 py-4">1204230114</td>
+                                <td class="px-6 py-4 font-bold text-brand-blue">62.97%</td>
+                                <td class="px-6 py-4"><span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-md text-xs font-semibold">Excellent</span></td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="detail-mahasiswa.html" class="text-brand-purple hover:text-purple-400"><i data-lucide="external-link" class="w-4 h-4 inline"></i></a>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors">
+                                <td class="px-6 py-4 font-medium text-white flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs">AR</div>
+                                    ARDYN NUGRAHA REYGAN
+                                </td>
+                                <td class="px-6 py-4">1204230001</td>
+                                <td class="px-6 py-4 font-bold text-brand-blue">64.68%</td>
+                                <td class="px-6 py-4"><span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-md text-xs font-semibold">Excellent</span></td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="detail-mahasiswa.html" class="text-brand-purple hover:text-purple-400"><i data-lucide="external-link" class="w-4 h-4 inline"></i></a>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors">
+                                <td class="px-6 py-4 font-medium text-white flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs">AV</div>
+                                    ANITA VERONIKA CIPTAJATI
+                                </td>
+                                <td class="px-6 py-4">1204230007</td>
+                                <td class="px-6 py-4 font-bold text-brand-blue">69.08%</td>
+                                <td class="px-6 py-4"><span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-md text-xs font-semibold">Excellent</span></td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="detail-mahasiswa.html" class="text-brand-purple hover:text-purple-400"><i data-lucide="external-link" class="w-4 h-4 inline"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Chart.js Configuration
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = 'Inter';
+
+        // Bar Chart (PLO)
+        const ctxBar = document.getElementById('ploChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['PLO 1', 'PLO 2', 'PLO 3', 'PLO 4', 'PLO 5', 'PLO 6', 'PLO 7', 'PLO 8', 'PLO 9', 'PLO 10'],
+                datasets: [{
+                    label: 'Angkatan 2023',
+                    data: [62.03, 62.91, 61.75, 47.04, 64.41, 53.55, 27.02, 69.07, 69.08, 50.5],
+                    backgroundColor: '#7C3AED',
+                    borderRadius: 6,
+                    barPercentage: 0.6
+                },
+                {
+                    label: 'Angkatan 2024',
+                    data: [57.58, 57.15, 59.75, 44.81, 55.06, 45.63, 27.03, 64.27, 62.97, 45.0],
+                    backgroundColor: '#38BDF8',
+                    borderRadius: 6,
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', align: 'end', labels: { usePointStyle: true, boxWidth: 8 } }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                        border: { display: false }
+                    },
+                    x: {
+                        grid: { display: false },
+                        border: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Radar Chart
+        const ctxRadar = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Knowledge', 'Problem Solving', 'Design', 'Investigation', 'Tools Usage', 'Teamwork', 'Comm'],
+                datasets: [{
+                    label: 'Avg Competency',
+                    data: [85, 75, 65, 55, 80, 90, 70],
+                    backgroundColor: 'rgba(124, 58, 237, 0.2)',
+                    borderColor: '#7C3AED',
+                    pointBackgroundColor: '#38BDF8',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#38BDF8',
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(148, 163, 184, 0.1)' },
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                        pointLabels: { color: '#94a3b8', font: { size: 11 } },
+                        ticks: { display: false, max: 100, min: 0 }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

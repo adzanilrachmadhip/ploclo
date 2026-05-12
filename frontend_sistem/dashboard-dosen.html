@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - Dosen Wali Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { purple: '#7C3AED', blue: '#38BDF8', dark: '#0F172A', darker: '#0B1121' }
+                    }
+                }
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-dark min-h-screen text-slate-200 flex" x-data="{ sidebarOpen: true }">
+
+    <!-- Sidebar -->
+    <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="glass-panel transition-all duration-300 flex flex-col fixed h-full z-20">
+        <div class="h-16 flex items-center justify-between px-4 border-b border-slate-700/50">
+            <div class="flex items-center gap-3 overflow-hidden" x-show="sidebarOpen">
+                <i data-lucide="compass" class="text-brand-purple w-8 h-8 flex-shrink-0"></i>
+                <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">COMPASS</span>
+            </div>
+            <div class="flex items-center justify-center w-full" x-show="!sidebarOpen">
+                <i data-lucide="compass" class="text-brand-purple w-8 h-8"></i>
+            </div>
+        </div>
+
+        <div class="p-4 flex flex-col gap-2 flex-1 overflow-y-auto">
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4" x-show="sidebarOpen">Menu Utama</p>
+            <a href="dashboard-kaprodi.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Dashboard Kaprodi</span>
+            </a>
+            <a href="dashboard-dosen.html" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-brand-purple/20 text-brand-purple border border-brand-purple/30 glow-primary transition-all">
+                <i data-lucide="users" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Dosen Wali</span>
+            </a>
+            <a href="input-nilai.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="file-edit" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Input Nilai</span>
+            </a>
+            <a href="mata-kuliah.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="book-open" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Mata Kuliah</span>
+            </a>
+            <a href="rps.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="file-text" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Kelola RPS</span>
+            </a>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-6" x-show="sidebarOpen">Settings</p>
+            <a href="settings.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="settings" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Admin Settings</span>
+            </a>
+        </div>
+        <div class="p-4 border-t border-slate-700/50">
+            <a href="index.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-400/10 transition-all">
+                <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main :class="sidebarOpen ? 'ml-64' : 'ml-20'" class="flex-1 transition-all duration-300 min-h-screen flex flex-col">
+        <header class="h-16 glass-panel border-b border-slate-700/50 flex items-center justify-between px-6 sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <button @click="sidebarOpen = !sidebarOpen" class="text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 class="text-lg font-semibold hidden sm:block">Perwalian Mahasiswa</h2>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="relative hidden md:block">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                    <input type="text" placeholder="Search student..." class="pl-10 pr-4 py-2 bg-slate-900/50 border border-slate-700 rounded-full text-sm focus:outline-none focus:border-brand-purple w-64 text-slate-200">
+                </div>
+                <button class="relative text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                <div class="flex items-center gap-3 border-l border-slate-700 pl-6 cursor-pointer">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue flex items-center justify-center text-sm font-bold text-white shadow-lg">
+                        AH
+                    </div>
+                    <div class="hidden md:block">
+                        <p class="text-sm font-medium text-white">Dr. Andi Hidayat</p>
+                        <p class="text-xs text-slate-400">Dosen Wali</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-6 md:p-8 flex-1 overflow-y-auto">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-1">Monitoring Perwalian</h3>
+                    <p class="text-sm text-slate-400">Pantau progress dan peringatan akademik mahasiswa wali.</p>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card rounded-2xl p-6">
+                    <p class="text-sm font-medium text-slate-400">Total Mahasiswa Wali</p>
+                    <h4 class="text-3xl font-bold text-white mt-1 mb-2">45</h4>
+                    <div class="w-full bg-slate-700 rounded-full h-2">
+                        <div class="bg-brand-blue h-2 rounded-full" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-2xl p-6 border border-red-500/30 relative">
+                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-red-500/20 rounded-full blur-xl"></div>
+                    <p class="text-sm font-medium text-slate-400">Warning (IPK < 2.5 atau PLO Rendah)</p>
+                    <h4 class="text-3xl font-bold text-red-400 mt-1 mb-2">3</h4>
+                    <button class="text-sm text-red-400 flex items-center hover:text-red-300">Lihat Detail <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></button>
+                </div>
+                <div class="glass-card rounded-2xl p-6">
+                    <p class="text-sm font-medium text-slate-400">Rekomendasi TA Siap</p>
+                    <h4 class="text-3xl font-bold text-emerald-400 mt-1 mb-2">12</h4>
+                    <button class="text-sm text-emerald-400 flex items-center hover:text-emerald-300">Generate Topik <i data-lucide="sparkles" class="w-4 h-4 ml-1"></i></button>
+                </div>
+            </div>
+
+            <!-- Student List Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Student Card -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center text-lg font-bold border border-slate-600">DA</div>
+                            <div>
+                                <h4 class="font-bold text-white">DAFA ADHAN JUSTITIA</h4>
+                                <p class="text-xs text-slate-400">1204230002</p>
+                            </div>
+                        </div>
+                        <button class="text-slate-400 hover:text-white"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-400">Average PLO</span>
+                            <span class="text-white font-bold">59.8%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-1.5">
+                            <div class="bg-amber-400 h-1.5 rounded-full" style="width: 59.8%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2 mt-auto">
+                        <a href="detail-mahasiswa.html" class="flex-1 bg-slate-800 hover:bg-slate-700 text-center py-2 rounded-lg text-sm font-medium transition-colors">Detail</a>
+                        <button class="flex-1 bg-brand-purple hover:bg-purple-600 text-center py-2 rounded-lg text-sm font-medium transition-colors">Rekomendasi TA</button>
+                    </div>
+                </div>
+
+                <!-- Student Card 2 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col border border-red-500/30">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-red-900/50 to-slate-800 flex items-center justify-center text-lg font-bold border border-red-500/50 text-red-200">IG</div>
+                            <div>
+                                <h4 class="font-bold text-white">I GUSTI AYU LEONIKI</h4>
+                                <p class="text-xs text-slate-400">1204230004</p>
+                            </div>
+                        </div>
+                        <span class="bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded border border-red-500/30">At Risk</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-400">Average PLO</span>
+                            <span class="text-white font-bold">42.6%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-1.5">
+                            <div class="bg-red-500 h-1.5 rounded-full" style="width: 42.6%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2 mt-auto">
+                        <a href="detail-mahasiswa.html" class="flex-1 bg-slate-800 hover:bg-slate-700 text-center py-2 rounded-lg text-sm font-medium transition-colors">Detail</a>
+                        <button class="flex-1 bg-slate-800 hover:bg-slate-700 text-center py-2 rounded-lg text-sm font-medium transition-colors text-brand-blue"><i data-lucide="message-square" class="w-4 h-4 inline mr-1"></i> Konseling</button>
+                    </div>
+                </div>
+
+                <!-- Student Card 3 -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center text-lg font-bold border border-slate-600">DP</div>
+                            <div>
+                                <h4 class="font-bold text-white">DEVINA PUTRI ARIANTI</h4>
+                                <p class="text-xs text-slate-400">1204230003</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-slate-400">Average PLO</span>
+                            <span class="text-white font-bold">66.3%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-1.5">
+                            <div class="bg-emerald-400 h-1.5 rounded-full" style="width: 66.3%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2 mt-auto">
+                        <a href="detail-mahasiswa.html" class="flex-1 bg-slate-800 hover:bg-slate-700 text-center py-2 rounded-lg text-sm font-medium transition-colors">Detail</a>
+                        <button class="flex-1 bg-brand-purple hover:bg-purple-600 text-center py-2 rounded-lg text-sm font-medium transition-colors">Rekomendasi TA</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

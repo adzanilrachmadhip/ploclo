@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPASS - Input Nilai</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { purple: '#7C3AED', blue: '#38BDF8', dark: '#0F172A', darker: '#0B1121' } } } } }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-dark min-h-screen text-slate-200 flex" x-data="{ sidebarOpen: true, saveModalOpen: false }">
+
+    <!-- Sidebar (Same as others) -->
+    <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="glass-panel transition-all duration-300 flex flex-col fixed h-full z-20">
+        <div class="h-16 flex items-center justify-between px-4 border-b border-slate-700/50">
+            <div class="flex items-center gap-3 overflow-hidden" x-show="sidebarOpen">
+                <i data-lucide="compass" class="text-brand-purple w-8 h-8 flex-shrink-0"></i>
+                <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">COMPASS</span>
+            </div>
+            <div class="flex items-center justify-center w-full" x-show="!sidebarOpen">
+                <i data-lucide="compass" class="text-brand-purple w-8 h-8"></i>
+            </div>
+        </div>
+        <div class="p-4 flex flex-col gap-2 flex-1 overflow-y-auto">
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4" x-show="sidebarOpen">Menu Utama</p>
+            <a href="dashboard-kaprodi.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Dashboard</span>
+            </a>
+            <a href="input-nilai.html" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-brand-purple/20 text-brand-purple border border-brand-purple/30 glow-primary transition-all">
+                <i data-lucide="file-edit" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Input Nilai</span>
+            </a>
+            <!-- other links simplified for prototype -->
+            <a href="detail-mahasiswa.html" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i data-lucide="user" class="w-5 h-5 flex-shrink-0"></i>
+                <span x-show="sidebarOpen" class="font-medium">Detail Mhs</span>
+            </a>
+        </div>
+    </aside>
+
+    <main :class="sidebarOpen ? 'ml-64' : 'ml-20'" class="flex-1 transition-all duration-300 min-h-screen flex flex-col">
+        <!-- Topbar -->
+        <header class="h-16 glass-panel border-b border-slate-700/50 flex items-center justify-between px-6 sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <button @click="sidebarOpen = !sidebarOpen" class="text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 class="text-lg font-semibold">Input Nilai - Algoritma Pemrograman [2324/1]</h2>
+            </div>
+            <button @click="saveModalOpen = true" class="bg-brand-purple hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center glow-primary">
+                <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Changes
+            </button>
+        </header>
+
+        <div class="p-6 md:p-8 flex-1 overflow-y-auto">
+            <!-- Filter & Search -->
+            <div class="glass-card rounded-2xl p-4 mb-6 flex flex-wrap gap-4 items-center justify-between">
+                <div class="flex gap-4 w-full md:w-auto">
+                    <select class="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg focus:ring-brand-purple block p-2.5">
+                        <option>Kelas: SI-47-01</option>
+                        <option>Kelas: SI-47-02</option>
+                    </select>
+                    <select class="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg focus:ring-brand-purple block p-2.5">
+                        <option>Asesmen: UTS</option>
+                        <option>Asesmen: UAS</option>
+                        <option>Asesmen: Tugas 1</option>
+                    </select>
+                </div>
+                <div class="relative w-full md:w-64">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                    <input type="text" placeholder="Cari NIM / Nama..." class="pl-10 w-full pr-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-sm focus:outline-none focus:border-brand-purple text-slate-200">
+                </div>
+            </div>
+
+            <!-- Editable Table -->
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-slate-400">
+                        <thead class="text-xs text-slate-300 uppercase bg-slate-800/80 sticky top-0">
+                            <tr>
+                                <th scope="col" class="px-6 py-4">No</th>
+                                <th scope="col" class="px-6 py-4">NIM</th>
+                                <th scope="col" class="px-6 py-4 w-64">Nama Mahasiswa</th>
+                                <th scope="col" class="px-6 py-4 text-center">Tugas 1 (15%)</th>
+                                <th scope="col" class="px-6 py-4 text-center">Quiz 1 (10%)</th>
+                                <th scope="col" class="px-6 py-4 text-center">UTS (35%)</th>
+                                <th scope="col" class="px-6 py-4 text-center bg-brand-purple/10 text-brand-purple rounded-tr-lg">Total CLO 1</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Row 1 -->
+                            <tr class="border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors">
+                                <td class="px-6 py-4">1</td>
+                                <td class="px-6 py-4 font-mono text-slate-300">1204230114</td>
+                                <td class="px-6 py-4 font-medium text-white">DIANA IFFATUL INSYIRAH</td>
+                                <td class="px-4 py-3"><input type="number" value="85" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-4 py-3"><input type="number" value="90" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-4 py-3"><input type="number" value="78" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-6 py-4 text-center font-bold text-brand-blue bg-brand-purple/5">81.5</td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr class="border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors">
+                                <td class="px-6 py-4">2</td>
+                                <td class="px-6 py-4 font-mono text-slate-300">1204230001</td>
+                                <td class="px-6 py-4 font-medium text-white">ARDYN NUGRAHA REYGAN SEPTIMUS</td>
+                                <td class="px-4 py-3"><input type="number" value="80" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-4 py-3"><input type="number" value="85" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-4 py-3"><input type="number" value="70" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-6 py-4 text-center font-bold text-brand-blue bg-brand-purple/5">75.0</td>
+                            </tr>
+                            <!-- Row 3 -->
+                            <tr class="border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors">
+                                <td class="px-6 py-4">3</td>
+                                <td class="px-6 py-4 font-mono text-slate-300">1204230002</td>
+                                <td class="px-6 py-4 font-medium text-white">DAFA ADHAN JUSTITIA</td>
+                                <td class="px-4 py-3"><input type="number" value="75" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-4 py-3"><input type="number" value="70" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-4 py-3"><input type="number" value="65" class="w-16 bg-slate-900 border border-slate-600 rounded text-center py-1 focus:border-brand-purple outline-none text-white mx-auto block"></td>
+                                <td class="px-6 py-4 text-center font-bold text-amber-400 bg-brand-purple/5">68.5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Modal (Alpine JS) -->
+        <div x-show="saveModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;">
+            <div class="glass-card w-96 rounded-2xl p-6" @click.away="saveModalOpen = false">
+                <div class="w-12 h-12 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="check" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-center text-white mb-2">Simpan Perubahan?</h3>
+                <p class="text-sm text-slate-400 text-center mb-6">Nilai yang disimpan akan langsung mengupdate kalkulasi ketercapaian PLO mahasiswa.</p>
+                <div class="flex gap-3">
+                    <button @click="saveModalOpen = false" class="flex-1 py-2 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-800 transition-colors">Batal</button>
+                    <button @click="saveModalOpen = false" class="flex-1 py-2 rounded-lg bg-brand-purple hover:bg-purple-600 text-white font-medium transition-colors">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
