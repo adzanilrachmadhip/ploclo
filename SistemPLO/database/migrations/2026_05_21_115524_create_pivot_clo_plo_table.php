@@ -14,16 +14,13 @@ return new class extends Migration {
             $table->id('id_pivot');
 
             $table->foreignId('id_clo')
-                ->nullable()
                 ->constrained('data_clo', 'id_clo')
                 ->cascadeOnDelete();
 
             $table->foreignId('id_plo')
-                ->nullable()
                 ->constrained('data_plo', 'id_plo')
                 ->cascadeOnDelete();
 
-            $table->decimal('percentage_weight', 5, 2)->nullable();
             $table->timestamps();
         });
     }
