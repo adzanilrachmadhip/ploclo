@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Services\PloCalculationService;
+use App\Http\Controllers\NilaiController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -37,3 +39,18 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::get('/api/kaprodi-only', function () { return response()->json(['ok' => 'kaprodi']); })->middleware([RoleMiddleware::class . ':kaprodi']);
     Route::get('/api/dosenwali-only', function () { return response()->json(['ok' => 'dosen wali']); })->middleware([RoleMiddleware::class . ':dosen wali']);
 });
+
+Route::get('/test-plo/{id}', function ($id) {
+
+    $service = new PloCalculationService();
+
+    return $service->calculate($id);
+});
+
+//panggil nilai controller
+Route::get('/nilai', [NilaiController::class, 'index'])
+    ->name('nilai.index');
+
+Route::get('/nilai/{idMahasiswa}/plo/{idPlo}', [NilaiController::class, 'show'])
+    ->name('nilai.show');
+

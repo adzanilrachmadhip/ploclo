@@ -1,0 +1,98 @@
+.nilai-page {
+    background: #F2F2F6;
+    min-height: 100vh;
+}
+
+.nilai-header {
+    height: 70px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+}
+
+.nilai-title {
+    font-family: 'Oxygen', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+}
+
+.nilai-content {
+    padding: 24px 48px;
+}
+
+.nilai-breadcrumb {
+    background: #D5C6FF !important;
+    border-radius: 5px;
+    height: 31px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    font-size: 15px;
+    font-weight: 300;
+    color: #000;
+    margin-bottom: 28px;
+}
+
+.nilai-filter-card {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 28px;
+}
+
+.nilai-table-card {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 16px;
+}
+
+.nilai-table {
+    font-size: 12px;
+    margin-bottom: 0;
+}
+
+.nilai-table th {
+    background: #F0F0F0 !important;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    border: 0.2px solid #6B6363;
+}
+
+.nilai-table td {
+    font-weight: 600;
+    vertical-align: middle;
+    border: 0.2px solid #6B6363;
+}
+
+.nilai-score-link {
+    color: #1f4ed8;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.nilai-score-link:hover {
+    text-decoration: underline;
+}
+
+.nilai-detail-card {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 24px;
+}
+
+.nilai-clo-small {
+    font-size: 11px;
+    color: #444;
+}
+
+.assessment-box {
+    border: 0.2px solid #6B6363;
+    border-radius: 2px;
+    background: #fff;
+    padding: 8px 10px;
+    font-size: 12px;
+}
