@@ -4,8 +4,7 @@
 
 @section('content')
 <div class="d-flex nilai-page">
-
-    <x-dashboard.sidebar :user="auth()->user()" :nav-items="[]" />
+    <x-dashboard.sidebar :user="auth()->user()" :nav-items="[]" />    {{-- @include('partials.sidebar', ['user' => $user, 'navItems' => $navItems]) --}}
 
     <div class="flex-grow-1">
         <div class="nilai-header">
