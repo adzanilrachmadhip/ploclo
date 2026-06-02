@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    font-family: 'Overpass', sans-serif;
+    background: #F2F2F6;
+}
+
+.compass-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background: #F2F2F6;
+}
+
+.compass-main {
+    flex: 1;
+    min-width: 0;
+    margin-left: 250px;
+}
+
+.compass-content {
+    padding: 24px;
+}
+
+.compass-sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #0F1B2D;
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 24px 18px;
+    z-index: 1000;
+}
+
+.compass-logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+}
+
+.compass-menu-title {
+    font-size: 12px;
+    color: #8A95A5;
+    margin-bottom: 12px;
+}
+
+.compass-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #DDE3EA;
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.compass-nav-link:hover,
+.compass-nav-link.active {
+    background: #2A3650;
+    color: white;
+}
+
+.compass-header {
+    height: 64px;
+    background: white;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+    .compass-wrapper {
+        flex-direction: column;
+    }
+
+    .compass-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .compass-main {
+        margin-left: 0;
+    }
+
+    .compass-content {
+        padding: 16px;
+    }
+}
+
