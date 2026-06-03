@@ -53,11 +53,19 @@ body {
 }
 
 .menu-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     color: white;
     text-decoration: none;
-    padding: 14px 28px;
+    padding: 14px 24px;
     font-size: 14px;
+    position: relative;
+    transition: background 0.2s ease;
+}
+
+.menu-link.menu-toggle {
+    justify-content: flex-start;
 }
 
 .menu-link.active,
@@ -65,6 +73,58 @@ body {
     background: #29334F;
     color: white;
 }
+
+.menu-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 4px;
+    background: #5FE4D7;
+    border-radius: 999px;
+}
+
+.submenu {
+    display: none;
+    flex-direction: column;
+    padding-left: 16px;
+    margin-bottom: 8px;
+}
+
+.submenu.show {
+    display: flex;
+}
+
+.submenu-link {
+    display: block;
+    position: relative;
+    color: #d7dce6;
+    text-decoration: none;
+    padding: 10px 24px 10px 52px;
+    font-size: 13px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.submenu-link.active,
+.submenu-link:hover {
+    background: #1f2b43;
+    color: white;
+}
+
+.submenu-link.active::before {
+    content: '';
+    position: absolute;
+    left: 36px;
+    top: 14px;
+    bottom: 14px;
+    width: 3px;
+    background: #5FE4D7;
+    border-radius: 999px;
+}
+
 
 .logout-area {
     position: absolute;
@@ -515,4 +575,23 @@ body:has(.dashboard-page) {
 
 .header-actions input {
     width: 130px;
+}
+
+.submenu {
+    background: #101827;
+    padding: 6px 0;
+}
+
+.submenu-link {
+    display: block;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    font-size: 11px;
+    padding: 10px 0 10px 52px;
+}
+
+.submenu-link:hover,
+.submenu-link.active {
+    background: #202A45;
+    color: white;
 }

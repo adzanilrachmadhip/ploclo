@@ -25,6 +25,26 @@ Route::get('/dashboard-ui', function () {
     return view('dashboard.index_nw');
 })->name('dashboard.ui');
 
+Route::get('/nilai-ui', function () {
+    return view('nilai.index_nw');
+})->name('nilai.ui');
+
+Route::get('/mata-kuliah-ui', function () {
+    return view('mata-kuliah.index');
+})->name('mata-kuliah.index');
+
+Route::get('/mata-kuliah/manage-plo-ui', function () {
+    return view('mata-kuliah.manage_plo_nw');
+})->name('mata-kuliah.manage-plo.ui');
+
+Route::get('/rps-ui', function () {
+    return view('rps.index');
+})->name('rps.index');
+
+Route::get('/nilai-detail-ui', function () {
+    return view('nilai.show_nw');
+})->name('nilai.detail.ui');
+
 
 // dashboard
 Route::middleware('auth')->group(function () {

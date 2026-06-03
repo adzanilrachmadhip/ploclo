@@ -7,16 +7,25 @@
     --login-bg: #7FF2EA;
 }
 
+html,
+body {
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
+}
+
 .login-page {
     min-height: 100vh;
+    height: 100%;
     background: var(--login-bg);
-    padding: 16px;
+    padding: 0;
     font-family: 'Oxygen', sans-serif;
+    display: flex;
 }
 
 .login-wrapper {
-    width: 100% ;
-    height: calc(100vh - 32px);
+    width: 100%;
+    min-height: 100vh;
     background: #ffffff;
     display: grid;
     grid-template-columns: 70% 30%;
