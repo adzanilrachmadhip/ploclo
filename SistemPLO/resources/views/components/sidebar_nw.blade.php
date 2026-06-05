@@ -32,10 +32,10 @@
     </a>
 
     <div id="submenu-mata-kuliah" class="submenu {{ $mataKuliahOpen ? 'show' : '' }}">
-        <a href="{{ route('mata-kuliah.index') }}" class="submenu-link {{ request()->routeIs('mata-kuliah.index') ? 'active' : '' }}">
+        <a href="{{ route('mata-kuliah.lihat.ui') }}" class="submenu-link {{ request()->routeIs('mata-kuliah.lihat.ui') ? 'active' : '' }}">
             Lihat Mata Kuliah
         </a>
-        <a href="{{ route('mata-kuliah.manage-plo.ui') }}" class="submenu-link {{ request()->routeIs('mata-kuliah.manage-plo.ui') ? 'active' : '' }}">
+        <a href="{{ route('mata-kuliah.index') }}" class="submenu-link {{ request()->routeIs('mata-kuliah.index') ? 'active' : '' }}">
             Kelola Mata Kuliah
         </a>
     </div>

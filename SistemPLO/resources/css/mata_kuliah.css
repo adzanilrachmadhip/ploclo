@@ -428,3 +428,39 @@
     }
 
 }
+
+/* LIHAT MATA KULIAH */
+
+.mk-lihat-table {
+    min-width: 1120px;
+}
+
+.mk-lihat-table th:nth-child(1),
+.mk-lihat-table td:nth-child(1) {
+    width: 70px;
+    text-align: center;
+}
+
+.mk-lihat-table th:nth-child(2),
+.mk-lihat-table td:nth-child(2) {
+    width: 170px;
+    text-align: center;
+}
+
+.mk-lihat-table th:nth-child(3),
+.mk-lihat-table td:nth-child(3) {
+    width: 340px;
+}
+
+.mk-lihat-table th:nth-child(4),
+.mk-lihat-table td:nth-child(4) {
+    width: 330px;
+}
+
+.mk-lihat-table th:nth-child(5),
+.mk-lihat-table td:nth-child(5),
+.mk-lihat-table th:nth-child(6),
+.mk-lihat-table td:nth-child(6) {
+    width: 140px;
+    text-align: center;
+}
