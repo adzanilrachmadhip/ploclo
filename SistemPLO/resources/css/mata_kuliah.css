@@ -464,3 +464,637 @@
     width: 140px;
     text-align: center;
 }
+
+/* MODAL EDIT MATA KULIAH */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.18);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.edit-mk-modal {
+    width: 520px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.edit-modal-header {
+    height: 48px;
+    border-bottom: 1px solid #E5E5E5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+}
+
+.edit-modal-header h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.edit-modal-body {
+    padding: 20px 22px 10px;
+    display: grid;
+    gap: 18px;
+}
+
+.edit-field-group {
+    display: grid;
+    gap: 8px;
+}
+
+.edit-field-group label {
+    font-size: 13px;
+    color: #1D1D1D;
+    font-weight: 400;
+}
+
+.edit-field-value {
+    background: #F4F4F4;
+    border-radius: 8px;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+}
+
+.edit-code-text {
+    font-size: 14px;
+    color: #2B2B2B;
+}
+
+.modal-footer-edit {
+    padding: 16px 18px 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.modal-info-box {
+    height: 80px;
+    margin: 20px 22px 0;
+    background: #FCF7E7;
+    border-radius: 10px;
+}
+
+.modal-header-custom button,
+.edit-modal-header button {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    color: #444;
+}
+
+.modal-footer-custom button {
+    border: none;
+    color: white;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 14px;
+}
+
+.btn-cancel {
+    background: #5E5E5E;
+}
+
+.btn-save {
+    background: #3A7BC8;
+}
+
+.switch {
+    position: relative;
+    width: 58px;
+    height: 30px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #CFCFCF;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 3px;
+    top: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+    background: #2D79B8;
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(28px);
+}
+
+.modal-header-custom h3 {
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.modal-header-custom button {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    color: #666;
+}
+
+.modal-info-box {
+    height: 90px;
+    margin: 26px 24px 24px;
+    background: #FFFBE6;
+    border-radius: 6px;
+}
+
+.modal-form-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    align-items: center;
+    padding: 0 24px;
+    margin-bottom: 24px;
+}
+
+.modal-form-row label {
+    font-size: 14px;
+}
+
+.modal-form-row select {
+    height: 28px;
+    border: none;
+    background: #F2F2F2;
+    padding: 0 12px;
+    font-size: 13px;
+    color: #333;
+}
+
+.switch {
+    position: relative;
+    width: 58px;
+    height: 30px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #CFCFCF;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 3px;
+    top: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+    background: #2D79B8;
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(28px);
+}
+
+.modal-footer-custom {
+    border-top: 1px solid #CFCFCF;
+    padding: 12px 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.modal-footer-custom button {
+    border: none;
+    color: white;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.btn-cancel {
+    background: #5E5E5E;
+}
+
+.btn-save {
+    background: #3A7BC8;
+}
+
+/*button detail*/
+
+.detail-at-modal {
+    width: 760px;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    padding: 20px 20px 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #E7E7E7;
+}
+
+.detail-header h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.detail-meta-row {
+    display: flex;
+    gap: 18px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+
+.detail-meta-item {
+    flex: 1;
+    display: grid;
+    gap: 6px;
+}
+
+.detail-meta-item label {
+    font-size: 13px;
+    color: #2A2A2A;
+    margin: 0;
+}
+
+.detail-meta-box {
+    background: #F7F7F7;
+    border-radius: 8px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+}
+
+.detail-meta-box span {
+    font-size: 14px;
+    color: #333333;
+}
+
+.detail-table-wrap {
+    padding: 0;
+}
+
+.detail-at-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+}
+
+.detail-at-table th,
+.detail-at-table td {
+    border: 1px solid #DADADA;
+    padding: 10px 12px;
+    font-size: 13px;
+}
+
+.detail-at-table th {
+    background: #F4F7F4;
+    color: #1D1D1D;
+    font-weight: 600;
+    text-align: left;
+}
+
+.detail-at-table td {
+    background: #FFFFFF;
+    color: #2E2E2E;
+}
+
+.detail-footer-detail {
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-at-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detail-at-table th,
+.detail-at-table td {
+    border: 1px solid #D5D5D5;
+    padding: 12px;
+    font-size: 13px;
+}
+
+.detail-at-table th {
+    background: #F5F5F5;
+    font-weight: 700;
+}
+
+.detail-footer {
+    padding: 18px 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-footer p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.btn-close-detail {
+    border: none;
+    background: #6B6B6B;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 4px;
+}
+
+/* ADD PLO dr manage mk */
+
+.add-plo-modal {
+    width: 540px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.add-plo-modal .modal-header-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    padding: 0 18px;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.add-plo-modal .modal-header-custom h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.add-plo-modal .modal-header-custom button {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    color: #666;
+    line-height: 1;
+    padding: 0;
+}
+
+.add-plo-body {
+    padding: 20px 18px;
+}
+
+.add-plo-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.add-plo-row label {
+    font-size: 13px;
+    color: #2A2A2A;
+    font-weight: 400;
+}
+
+.add-plo-row select {
+    height: 36px;
+    border: 1px solid #D5D5D5;
+    background: #F8F8F8;
+    padding: 0 10px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+/* FIX TAB ADD PLO */
+
+.add-plo-tabs {
+    display: flex;
+    gap: 0;
+    margin: 18px 0;
+    border-bottom: 2px solid #E5E5E5;
+}
+
+.add-plo-tabs button {
+    padding: 10px 16px;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.3s ease;
+}
+
+/* saat Add New aktif */
+.add-plo-tabs .tab-new.active {
+    color: #1D1D1D;
+    border-bottom-color: #3A7BC8;
+}
+
+/* saat Select PLO tidak aktif */
+.add-plo-tabs .tab-select {
+    color: #999;
+}
+
+/* saat Select PLO aktif */
+.add-plo-tabs .tab-select.active {
+    color: #1D1D1D;
+    border-bottom-color: #3A7BC8;
+}
+
+.textarea-row {
+    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+}
+
+.textarea-row textarea {
+    min-height: 80px;
+    padding: 10px 12px;
+    border: 1px solid #D5D5D5;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+    resize: vertical;
+    background: #F8F8F8;
+}
+
+.select-plo-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.plo-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.plo-search-box input {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #D5D5D5;
+    background: #F8F8F8;
+    padding: 0 10px 0 12px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+.plo-search-box span {
+    position: absolute;
+    right: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #999;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.add-plo-modal .modal-footer-custom {
+    height: auto;
+    padding: 16px 18px;
+    border-top: 1px solid #E5E5E5;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.add-plo-modal .modal-footer-custom button {
+    padding: 8px 18px;
+    font-size: 13px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.add-plo-modal .btn-cancel {
+    background: #6C6C6C;
+    color: white;
+}
+
+.add-plo-modal .btn-save {
+    background: #3A7BC8;
+    color: white;
+}
+
+/* gulir PLO*/
+.plo-select-area {
+    position: relative;
+    width: 100%;
+}
+
+.plo-search-box {
+    height: 36px;
+    border: 1px solid #9FC7FF;
+    border-bottom: 1px solid #599BFF;
+    display: flex;
+    align-items: center;
+    background: #fff;
+}
+
+.plo-search-box input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 0 8px;
+    font-size: 12px;
+}
+
+.plo-search-box button {
+    width: 34px;
+    height: 100%;
+    border: none;
+    background: white;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.plo-dropdown-list {
+    display: none;
+    position: absolute;
+    top: 42px;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    max-height: 120px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #3D9BFF;
+    z-index: 3000;
+    padding: 6px 6px 18px;
+}
+
+.plo-dropdown-list.show {
+    display: block;
+}
+
+.plo-option {
+    background: #F8DADA;
+    border-radius: 6px;
+    padding: 7px 10px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    line-height: 1.25;
+    cursor: pointer;
+}
+
+.plo-option:hover {
+    background: #F2C4C4;
+}
+
+.plo-option:last-child {
+    margin-bottom: 22px;
+}
