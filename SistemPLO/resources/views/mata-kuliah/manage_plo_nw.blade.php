@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.app_nw')
 
 @section('title', 'Manage PLO Mata Kuliah')
 
@@ -130,7 +130,15 @@
 
                                 <td>
                                     <div class="action-group">
-                                        <button type="button" class="btn-edit" onclick="openEditMkModal('BBK1AAB4')">
+                                        <button type="button" class="btn-edit btn-edit-plo"
+                                            onclick="openEditPloModal(this)"
+                                            data-fakultas="Fakultas Rekayasa Industri"
+                                            data-prodi="S1 Sistem Informasi"
+                                            data-kurikulum="2024"
+                                            data-nomor="1"
+                                            data-deskripsi="PLO 01 Mampu menganalisis permasalahan infokom yang kompleks, mendefinisikan, dan memodelkan kebutuhan dalam konteks enterprise atau masyarakat dengan menerapkan ilmu dan pengetahuan dalam bidang komputasi, teknologi informasi dan komunikasi, dan disiplin lain yang relevan"
+                                            data-status-mapping="Active"
+                                            data-status-plo="Active">
                                             Edit
                                         </button>
                                     </div>
@@ -304,7 +312,7 @@
         }
     </script>
 
-    //add plo
+    <!-- add plo -->
     <div id="addPloModal" class="modal-overlay">
         <div class="add-plo-modal">
 
@@ -466,6 +474,96 @@
         function selectPlo(value) {
             document.getElementById('ploSearchInput').value = value;
             document.getElementById('ploDropdownList').classList.remove('show');
+        }
+    </script>
+
+    <!-- add pop up edit di manage PLO -->
+    <div id="editPloModal" class="modal-overlay">
+        <div class="edit-plo-modal">
+
+            <div class="modal-header-custom">
+                <h3>Edit PLO</h3>
+                <button type="button" onclick="closeEditPloModal()">×</button>
+            </div>
+
+            <div class="edit-plo-body">
+
+                <div class="edit-plo-row">
+                    <label for="editFakultas">Fakultas</label>
+                    <select id="editFakultas" name="fakultas">
+                        <option value="Fakultas Rekayasa Industri">Fakultas Rekayasa Industri</option>
+                    </select>
+                </div>
+
+                <div class="edit-plo-row">
+                    <label for="editProdi">Program Studi</label>
+                    <select id="editProdi" name="program_studi">
+                        <option value="S1 Sistem Informasi">S1 Sistem Informasi</option>
+                    </select>
+                </div>
+
+                <div class="edit-plo-row">
+                    <label for="editKurikulum">Tahun Kurikulum</label>
+                    <select id="editKurikulum" name="tahun_kurikulum">
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                </div>
+
+                <div class="edit-plo-row">
+                    <label for="editNomorPlo">Nomor PLO</label>
+                    <input type="text" id="editNomorPlo" name="nomor_plo" readonly>
+                </div>
+
+                <div class="edit-plo-row textarea-row">
+                    <label for="editDeskripsiPlo">Deskripsi PLO</label>
+                    <textarea id="editDeskripsiPlo" name="deskripsi_plo"></textarea>
+                </div>
+
+                <div class="edit-plo-row">
+                    <label for="editStatusMapping">Status Aktif PLO Mapping</label>
+                    <label class="switch">
+                        <input type="checkbox" id="editStatusMapping" name="status_mapping">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="edit-plo-row">
+                    <label for="editStatusPlo">Status Aktif PLO</label>
+                    <label class="switch">
+                        <input type="checkbox" id="editStatusPlo" name="status_plo">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" onclick="closeEditPloModal()">Cancel</button>
+                <button type="button" class="btn-save">Save</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function openEditPloModal(button) {
+            const modal = document.getElementById('editPloModal');
+
+            document.getElementById('editFakultas').value = button.dataset.fakultas || 'Fakultas Rekayasa Industri';
+            document.getElementById('editProdi').value = button.dataset.prodi || 'S1 Sistem Informasi';
+            document.getElementById('editKurikulum').value = button.dataset.kurikulum || '2024';
+            document.getElementById('editNomorPlo').value = button.dataset.nomor || '1';
+            document.getElementById('editDeskripsiPlo').value = button.dataset.deskripsi || '';
+            document.getElementById('editStatusMapping').checked = (button.dataset.statusMapping === 'Active');
+            document.getElementById('editStatusPlo').checked = (button.dataset.statusPlo === 'Active');
+
+            modal.classList.add('show');
+        }
+
+        function closeEditPloModal() {
+            document.getElementById('editPloModal').classList.remove('show');
         }
     </script>
 @endsection

@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.app_nw')
 
 @section('title', 'Detail Nilai PLO - COMPASS')
 

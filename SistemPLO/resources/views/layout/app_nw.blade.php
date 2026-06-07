@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'COMPASS')</title>
+    @vite('resources/css/compass_nw.css')
 
     {{-- Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,12 +20,15 @@
 <body>
     <div class="compass-wrapper">
         @auth
-            <x-dashboard.sidebar :user="auth()->user()" />
+            @include('components.sidebar_nw')
         @endauth
 
         <div class="compass-main">
             @auth
-                <x-dashboard.header />
+            @include('components.header_nw', [
+                'title' => $headerTitle ?? 'COMPASS',
+                'searchLabel' => 'Search',
+            ])
             @endauth
 
             <main class="compass-content">

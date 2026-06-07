@@ -46,7 +46,7 @@ Route::get('/mata-kuliah/manage-plo-ui', function () {
 })->name('mata-kuliah.manage-plo.ui');
 
 Route::get('/rps-ui', function () {
-    return view('rps.index');
+    return view('rps.index_nw');
 })->name('rps.index');
 
 

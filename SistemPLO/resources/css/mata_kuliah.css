@@ -625,6 +625,7 @@
     color: #666;
 }
 
+
 .modal-info-box {
     height: 90px;
     margin: 26px 24px 24px;
@@ -1098,3 +1099,69 @@
 .plo-option:last-child {
     margin-bottom: 22px;
 }
+
+/* edit button di manage PLO */
+.edit-plo-modal .modal-header-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    padding: 0 18px;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.edit-plo-modal {
+    width: 760px;
+    max-width: calc(100vw - 32px);
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.edit-plo-body {
+    padding: 22px 28px;
+}
+
+.edit-plo-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 14px;
+}
+
+.edit-plo-row label {
+    font-size: 14px;
+    color: #222;
+}
+
+.edit-plo-row select,
+.edit-plo-row input,
+.edit-plo-row textarea {
+    width: 100%;
+    border: 1px solid #d4d4d4;
+    background: #eeeeee;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+.edit-plo-row textarea {
+    min-height: 110px;
+    resize: none;
+    background: #ffffff;
+}
+
+.edit-plo-row.textarea-row {
+    align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+    .edit-plo-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+}
+
