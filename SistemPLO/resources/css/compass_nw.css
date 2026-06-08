@@ -93,3 +93,61 @@ body {
     }
 }
 
+/* =========================
+   GLOBAL APP LAYOUT FIX
+========================= */
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+    font-family: 'Oxygen', sans-serif;
+    background: #F2F2F6;
+}
+
+body {
+    overflow: hidden;
+}
+
+.compass-wrapper {
+    width: 100%;
+    height: 100vh;
+    background: #F2F2F6;
+}
+
+/* Sidebar dipasang fixed di kiri */
+.dashboard-sidebar {
+    width: 221px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+/* Area kanan diberi jarak sebesar sidebar */
+.compass-main {
+    margin-left: 221px;
+    width: calc(100% - 221px);
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #F2F2F6;
+}
+
+/* Header tetap di atas area kanan */
+.dashboard-header {
+    width: 100%;
+    height: 74px;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    background: #ffffff;
+}
+
+/* Konten halaman di bawah header */
+.compass-content {
+    width: 100%;
+    min-height: calc(100vh - 74px);
+    background: #F2F2F6;
+}

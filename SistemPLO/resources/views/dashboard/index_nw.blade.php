@@ -1,22 +1,12 @@
 @extends('layout.app_nw')
 
 @section('title', 'Dashboard - COMPASS')
+@section('headerTitle', 'Dashboard Perhitungan PLO')
 
 @vite('resources/css/dashboard.css')
 
 @section('content')
-<div class="dashboard-page">
-    @include('components.sidebar_nw')
-
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-    <div class="dashboard-main">
-        @include('components.header_nw', [
-            'title' => 'Dashboard Perhitungan PLO',
-            'searchLabel' => 'Search',
-        ])
-
-        <main class="dashboard-content">
+        <main class="dashboard-inner">
             <div class="dashboard-top">
                 <p class="overview-title">Overview</p>
                 <p class="period-text">Tahun : 2425/1 Genap⌄</p>
@@ -129,18 +119,5 @@
                 </table>
             </div>
         </main>
-    </div>
 </div>
-
-<script>
-    function toggleSidebar() {
-        const sidebar = document.querySelector('.dashboard-sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
-
-        if (!sidebar || !overlay) return;
-
-        sidebar.classList.toggle('show');
-        overlay.classList.toggle('show');
-    }
-</script>
 @endsection

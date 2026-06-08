@@ -16,11 +16,18 @@ body {
 
 /* OVERRIDE GLOBAL LAYOUT STYLES FOR NEW UI */
 .compass-main {
-    margin-left: 0 !important;
+    margin-left: 221px !important;
+    width: calc(100% - 221px) !important;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #F2F2F6;
 }
 
 .compass-content {
     padding: 0 !important;
+    min-height: calc(100vh - 74px);
+    background: #F2F2F6;
 }
 
 
@@ -443,4 +450,145 @@ body {
     }
 }
 
+/* =========================
+   DASHBOARD INSIDE APP_NW
+========================= */
 
+.dashboard-inner {
+    padding: 24px 42px 40px;
+    box-sizing: border-box;
+}
+
+.dashboard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.overview-title {
+    font-weight: 700;
+    margin: 0;
+}
+
+.period-text {
+    font-size: 14px;
+    margin: 0;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 18px;
+}
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px 28px;
+    min-height: 130px;
+}
+
+.stat-card p {
+    font-size: 34px;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.stat-card h2 {
+    font-size: 44px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.chart-card {
+    background: #E8E0DB;
+    border-radius: 26px;
+    padding: 28px;
+    margin-top: 28px;
+}
+
+.chart-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.chart-area {
+    display: flex;
+    height: 320px;
+}
+
+.y-axis {
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #777;
+    font-size: 13px;
+}
+
+.bar-area {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+}
+
+.bar-item {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bar {
+    width: 28px;
+    border-radius: 8px;
+    margin-top: auto;
+}
+
+.bar-item span {
+    font-size: 13px;
+    color: #777;
+    margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+    .compass-main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .dashboard-inner {
+        padding: 20px;
+    }
+
+    .stat-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .chart-area {
+        overflow-x: auto;
+    }
+
+    .bar-area {
+        min-width: 700px;
+    }
+}
+
+.dashboard-inner {
+    padding: 24px 42px 40px;
+    box-sizing: border-box;
+}
+
+.dashboard-header {
+    width: 100%;
+    height: 74px;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    background: #ffffff;
+}

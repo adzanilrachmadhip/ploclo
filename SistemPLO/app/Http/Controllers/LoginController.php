@@ -12,7 +12,7 @@ class LoginController extends Controller
      */
     public function showLogin()
     {
-        return view('auth.login');
+        return view('auth.login_nw');
     }
 
     /**
@@ -30,7 +30,7 @@ class LoginController extends Controller
         if (Auth::attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
             // Authentication successful
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'));
+            return redirect()->route('dashboard.ui');
         }
 
         // Authentication failed

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +11,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     {{-- Font --}}
-    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700&family=Oxygen:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700&family=Oxygen:wght@400;700&display=swap"
+        rel="stylesheet">
 
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('css/compass.css') }}">
 
     @yield('styles')
 </head>
+
 <body>
     <div class="compass-wrapper">
         @auth
@@ -25,10 +29,10 @@
 
         <div class="compass-main">
             @auth
-            @include('components.header_nw', [
-                'title' => $headerTitle ?? 'COMPASS',
-                'searchLabel' => 'Search',
-            ])
+                @include('components.header_nw', [
+                    'title' => trim($__env->yieldContent('headerTitle')) ?: $headerTitle ?? 'COMPASS',
+                    'searchLabel' => 'Search',
+                ])
             @endauth
 
             <main class="compass-content">
@@ -41,4 +45,17 @@
 
     @yield('scripts')
 </body>
+
 </html>
+
+{{-- <script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.dashboard-sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+
+        if (!sidebar || !overlay) return;
+
+        sidebar.classList.toggle('show');
+        overlay.classList.toggle('show');
+    }
+</script> --}}
