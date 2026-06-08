@@ -25,6 +25,7 @@
     <div class="compass-wrapper">
         @auth
             @include('components.sidebar_nw')
+                <div class="sidebar-overlay" onclick="closeSidebar()"></div>
         @endauth
 
         <div class="compass-main">
@@ -42,20 +43,29 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.dashboard-sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
 
-    @yield('scripts')
-</body>
+            if (!sidebar || !overlay) return;
 
-</html>
-
-{{-- <script>
-    function toggleSidebar() {
+            sidebar.classList.toggle('show');
+            overlay.classList.toggle('show');
+        }
+        function closeSidebar() {
         const sidebar = document.querySelector('.dashboard-sidebar');
         const overlay = document.querySelector('.sidebar-overlay');
 
         if (!sidebar || !overlay) return;
 
-        sidebar.classList.toggle('show');
-        overlay.classList.toggle('show');
+        sidebar.classList.remove('show');
+        overlay.classList.remove('show');
     }
-</script> --}}
+    </script>
+
+    @yield('scripts')
+
+</body>
+
+</html>

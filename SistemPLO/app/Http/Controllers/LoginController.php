@@ -30,7 +30,7 @@ class LoginController extends Controller
         if (Auth::attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
             // Authentication successful
             $request->session()->regenerate();
-            return redirect()->route('dashboard.ui');
+            return redirect()->route('dashboard');
         }
 
         // Authentication failed

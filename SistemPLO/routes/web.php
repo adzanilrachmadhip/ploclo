@@ -52,9 +52,9 @@ Route::get('/rps-ui', function () {
 
 // dashboard
 Route::middleware('auth')->group(function () {
-
-    Route::get('/dashboard', [HomeController::class, 'index'])
-        ->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('dashboard.index_nw');
+    })->name('dashboard');
 
     // NILAI
     Route::get('/nilai', [NilaiController::class, 'index'])
@@ -63,7 +63,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/nilai/{idMahasiswa}/plo/{idPlo}', [NilaiController::class, 'show'])
         ->name('nilai.show');
 });
-
 
 
 // test plo

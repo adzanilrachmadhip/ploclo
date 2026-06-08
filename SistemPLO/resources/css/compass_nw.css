@@ -151,3 +151,39 @@ body {
     min-height: calc(100vh - 74px);
     background: #F2F2F6;
 }
+
+/*efek overlay*/
+@media (max-width: 768px) {
+    .dashboard-sidebar {
+        transform: translateX(-100%);
+        transition: 0.3s ease;
+        z-index: 999;
+    }
+
+    .dashboard-sidebar.show {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay {
+        display: none;
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 998;
+        cursor: pointer;
+    }
+
+    .compass-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    .mobile-menu-btn {
+        display: inline-block;
+    }
+}
+
