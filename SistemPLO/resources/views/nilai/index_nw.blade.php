@@ -1,153 +1,123 @@
 @extends('layout.app_nw')
 
 @section('title', 'Nilai - COMPASS')
+@section('headerTitle', 'Student Competency Oversight | Classroom Section Lens')
+@section('styles')
+    @vite(['resources/css/dashboard.css', 'resources/css/nilai.css'])
+@endsection
 
-@vite([
-    'resources/css/dashboard.css',
-    'resources/css/nilai.css'
-])
 @section('content')
 
-<div class="dashboard-page">
+    {{-- CONTENT --}}
+    <main class="nilai-wrapper">
 
-    {{-- SIDEBAR --}}
-    @include('components.sidebar_nw')
+        <div class="nilai-title">
+            Student Competency Oversight
+        </div>
 
-    {{-- MAIN --}}
-    <main class="dashboard-main">
+        {{-- FILTER --}}
+        <div class="filter-section">
 
-        {{-- HEADER --}}
-        <header class="dashboard-header">
+            <div class="filter-item">
+                <label>Kurikulum</label>
+                <select>
+                    <option>2024</option>
+                </select>
+            </div>
 
-            <button class="mobile-menu-btn" onclick="toggleSidebar()">
-                ☰
+            <div class="filter-item">
+                <label>Angkatan</label>
+                <select>
+                    <option>2024</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Periode Akademik</label>
+                <select>
+                    <option>2024/1</option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Kode Dosen</label>
+                <select>
+                    <option>TRL</option>
+                </select>
+            </div>
+
+            <button class="apply-btn">
+                Apply
             </button>
+        </div>
 
-            <h1>
-                Student Competency Oversight |
-                <span>Classroom Section Lens</span>
-            </h1>
+        {{-- INFO --}}
+        <div class="info-box">
+            <strong>INFO !!!</strong><br>
 
-            <div class="header-actions">
-                <div class="notif-dot">3</div>
+            TEMPAT INFORMASI <br>
 
-                <div class="profile-mini"></div>
-            </div>
+            | INFORMASI A |
+            INFORMASI B |
+            INFORMASI C |
+            INFORMASI D |
+        </div>
 
-        </header>
+        {{-- TABLE --}}
+        <div class="table-card">
+            <div class="table-responsive">
+                <table class="nilai-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIM</th>
+                            <th>Nama</th>
+                            <th>Kode Dosen</th>
 
-        {{-- CONTENT --}}
-        <section class="nilai-wrapper">
-
-            {{-- TITLE --}}
-            <div class="nilai-title">
-                Student Competency Oversight
-            </div>
-
-            {{-- FILTER --}}
-            <div class="filter-section">
-
-                <div class="filter-item">
-                    <label>Kurikulum</label>
-                    <select>
-                        <option>2024</option>
-                    </select>
-                </div>
-
-                <div class="filter-item">
-                    <label>Angkatan</label>
-                    <select>
-                        <option>2024</option>
-                    </select>
-                </div>
-
-                <div class="filter-item">
-                    <label>Periode Akademik</label>
-                    <select>
-                        <option>2024/1</option>
-                    </select>
-                </div>
-
-                <div class="filter-item">
-                    <label>Kode Dosen</label>
-                    <select>
-                        <option>TRL</option>
-                    </select>
-                </div>
-
-                <button class="apply-btn">
-                    Apply
-                </button>
-
-            </div>
-
-            {{-- INFO --}}
-            <div class="info-box">
-                <strong>INFO !!!</strong><br>
-
-                TEMPAT INFORMASI <br>
-
-                | INFORMASI A |
-                INFORMASI B |
-                INFORMASI C |
-                INFORMASI D |
-            </div>
-
-            {{-- TABLE --}}
-            <div class="table-card">
-
-                <div class="table-responsive">
-
-                    <table class="nilai-table">
-
-                        <thead>
-
+                            @foreach ($plos as $plo)
+                                <th>{{ $plo->nama_plo }}</th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($rows as $index => $row)
                             <tr>
-                                <th>No</th>
-                                <th>NIM</th>
-                                <th>Nama</th>
-                                <th>Kode Dosen</th>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $row['mahasiswa']->nim }}</td>
+                                <td>{{ $row['mahasiswa']->nama }}</td>
+                                <td>{{ $row['mahasiswa']->kode_dosen ?? '-' }}</td>
 
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <th>PLO0{{ $i }}</th>
-                                @endfor
+                                @foreach ($plos as $plo)
+                                    @php
+                                        $nilaiPlo = $row['plos'][$plo->id_plo] ?? null;
+                                    @endphp
+
+                                    <td>
+                                        @if ($nilaiPlo !== '-')
+                                            <a href="{{ route('nilai.show', [
+                                                'idMahasiswa' => $row['mahasiswa']->id_mahasiswa,
+                                                'idPlo' => $plo->id_plo,
+                                            ]) }}"
+                                                class="nilai-plo-link">
+                                                {{ number_format($nilaiPlo, 2) }}
+                                            </a>
+                                        @else
+                                            <span>-</span>
+                                        @endif
+                                    </td>
+                                @endforeach
                             </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            @for ($x = 1; $x <= 10; $x++)
-
+                        @empty
                             <tr>
-
-                                <td>{{ $x }}</td>
-                                <td>120423000{{ $x }}</td>
-                                <td>Jihan Natasya Najwa</td>
-                                <td>TRL</td>
-
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <td>{{ rand(50, 100) }}</td>
-                                @endfor
-
+                                <td colspan="{{ 4 + $plos->count() }}" class="text-center">
+                                    Data nilai belum tersedia.
+                                </td>
                             </tr>
-
-                            @endfor
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-
-        </section>
-
+        </div>
     </main>
-
-</div>
-
-<div id="sidebarOverlay" class="sidebar-overlay"></div>
 
 @endsection

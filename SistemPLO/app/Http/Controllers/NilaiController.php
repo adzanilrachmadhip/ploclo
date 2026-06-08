@@ -39,7 +39,7 @@ class NilaiController extends Controller
             ];
         });
 
-        return view('nilai.index', compact('rows', 'plos'));
+        return view('nilai.index_nw', compact('rows', 'plos'));
     }
 
     public function show($idMahasiswa, $idPlo, PloCalculationService $service)
@@ -55,6 +55,6 @@ class NilaiController extends Controller
             })
             ->values();
 
-        return view('nilai.show', compact('mahasiswa', 'plo', 'cloResults'));
+        return view('nilai.show_nw', compact('mahasiswa', 'plo', 'cloResults'));
     }
 }

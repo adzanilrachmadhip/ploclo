@@ -17,21 +17,34 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 // TESTING UI LOGIN BARU
-Route::get('/login-ui', function () {
-    return view('auth.login_nw');
-})->name('login.ui');
+// Route::get('/login-ui', function () {
+//     return view('auth.login_nw');
+// })->name('login.ui');
 
-Route::get('/dashboard-ui', function () {
-    return view('dashboard.index_nw');
-})->name('dashboard.ui');
+// Route::get('/dashboard-ui', function () {
+//     return view('dashboard.index_nw');
+// })->name('dashboard.ui');
 
-Route::get('/nilai-ui', function () {
-    return view('nilai.index_nw');
-})->name('nilai.ui');
+// Route::get('/nilai-ui', function () {
+//     return view('nilai.index_nw');
+// })->middleware('auth')->name('nilai.ui');
 
-Route::get('/nilai-detail-ui', function () {
-    return view('nilai.show_nw');
-})->name('nilai.detail.ui');
+// Route::get('/nilai-detail-ui', function () {
+//     return view('nilai.show_nw');
+// })->middleware('auth')->name('nilai.detail.ui');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard.index_nw');
+    })->name('dashboard');
+
+    Route::get('/nilai', [NilaiController::class, 'index'])
+        ->name('nilai.index');
+
+    Route::get('/nilai/{idMahasiswa}/plo/{idPlo}', [NilaiController::class, 'show'])
+        ->name('nilai.show');
+});
 
 Route::get('/mata-kuliah-ui', function () {
     return view('mata-kuliah.index');
@@ -49,29 +62,13 @@ Route::get('/rps-ui', function () {
     return view('rps.index_nw');
 })->name('rps.index');
 
-
-// dashboard
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.index_nw');
-    })->name('dashboard');
-
-    // NILAI
-    Route::get('/nilai', [NilaiController::class, 'index'])
-        ->name('nilai.index');
-
-    Route::get('/nilai/{idMahasiswa}/plo/{idPlo}', [NilaiController::class, 'show'])
-        ->name('nilai.show');
-});
-
-
 // test plo
-Route::get('/test-plo/{id}', function ($id) {
+// Route::get('/test-plo/{id}', function ($id) {
 
-    $service = new PloCalculationService();
+//     $service = new PloCalculationService();
 
-    return $service->calculate($id);
-});
+//     return $service->calculate($id);
+// });
 
 
 

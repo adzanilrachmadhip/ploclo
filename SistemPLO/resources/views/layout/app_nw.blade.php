@@ -25,7 +25,7 @@
     <div class="compass-wrapper">
         @auth
             @include('components.sidebar_nw')
-                <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+            <div class="sidebar-overlay" onclick="closeSidebar()"></div>
         @endauth
 
         <div class="compass-main">
@@ -53,15 +53,16 @@
             sidebar.classList.toggle('show');
             overlay.classList.toggle('show');
         }
+
         function closeSidebar() {
-        const sidebar = document.querySelector('.dashboard-sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
+            const sidebar = document.querySelector('.dashboard-sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
 
-        if (!sidebar || !overlay) return;
+            if (!sidebar || !overlay) return;
 
-        sidebar.classList.remove('show');
-        overlay.classList.remove('show');
-    }
+            sidebar.classList.remove('show');
+            overlay.classList.remove('show');
+        }
     </script>
 
     @yield('scripts')

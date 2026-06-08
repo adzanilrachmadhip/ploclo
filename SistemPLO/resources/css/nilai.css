@@ -198,3 +198,17 @@
 .nilai-table tbody tr:nth-child(odd) {
     background: #FFFFFF;
 }
+
+.nilai-plo-link {
+    display: inline-block;
+    color: #111827;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.nilai-plo-link:hover {
+    background: #D9C2FF;
+    color: #111827;
+}
