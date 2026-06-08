@@ -39,6 +39,6 @@ class HomeController extends Controller
 
         $user = auth()->user();
 
-        return view('dashboard.index', compact('ploData', 'navItems', 'chartMax', 'yAxisTicks', 'user'));
+        return view('dashboard.index_nw', compact('ploData', 'navItems', 'chartMax', 'yAxisTicks', 'user'));
     }
 }

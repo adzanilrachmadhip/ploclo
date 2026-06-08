@@ -1,161 +1,110 @@
 @extends('layout.app_nw')
 
 @section('title', 'RPS - COMPASS')
+@section('headerTitle', 'RPS')
 
-@vite(['resources/css/dashboard.css', 'resources/css/rps.css'])
+@section('styles')
+    @vite('resources/css/mata_kuliah.css')
+@endsection
 
 @section('content')
-    <div class="dashboard-page">
-        @include('components.sidebar_nw')
+    <section class="mk-wrapper">
+        <div class="mk-title">Rencana Pembelajaran Semester (RPS)</div>
 
-        <main class="dashboard-main">
-            <header class="dashboard-header">
-                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+        <div class="mk-filter">
+            <div class="filter-row">
+                <label>Tahun Kurikulum</label>
+                <select>
+                    <option>2024</option>
+                    <option>2025</option>
+                </select>
+            </div>
 
-                <h1>Rencana Pengajaran Semester</h1>
+            <div class="filter-row">
+                <label>Semester</label>
+                <select>
+                    <option>Semua Semester</option>
+                    <option>Semester 1</option>
+                    <option>Semester 2</option>
+                    <option>Semester 3</option>
+                    <option>Semester 4</option>
+                    <option>Semester 5</option>
+                    <option>Semester 6</option>
+                    <option>Semester 7</option>
+                    <option>Semester 8</option>
+                </select>
+            </div>
 
-                <div class="header-actions">
-                    <input type="text" placeholder="Search">
-                    <span class="notif">3</span>
-                    <div class="avatar"></div>
-                    <span>⌄</span>
-                </div>
-            </header>
+            <button class="mk-apply-btn">Apply</button>
+        </div>
 
-            <section class="rps-wrapper">
-                <div class="rps-title">Daftar Rancangan Pengajaran Semester</div>
+        <div class="mk-info-box">
+            <strong>INFO !!!</strong><br>
+            Halaman ini menampilkan daftar dokumen RPS mata kuliah berdasarkan kurikulum dan semester.
+        </div>
 
-                <div class="rps-filter">
-                    <div class="filter-row">
-                        <label>Tahun Kurikulum</label>
-                        <select>
-                            <option>2024</option>
-                        </select>
-                    </div>
+        <div class="mk-table-top">
+            <div>
+                <span class="record-box"></span>
+                <span>Record per pages</span>
+            </div>
 
-                    <div class="filter-row">
-                        <label>Tahun Akademik</label>
-                        <select>
-                            <option>2025/2026 Semester Ganjil</option>
-                        </select>
-                    </div>
+            <div>
+                <label>Search (Press Enter):</label>
+                <input type="text">
+            </div>
+        </div>
 
-                    <button class="rps-apply-btn">Apply</button>
-                </div>
+        <div class="mk-table-wrap">
+            <table class="mk-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Mata Kuliah</th>
+                        <th>Nama Mata Kuliah</th>
+                        <th>Semester</th>
+                        <th>Jenis Mata Kuliah</th>
+                        <th>Dokumen RPS</th>
+                    </tr>
+                </thead>
 
-                <div class="rps-info-box">Info</div>
+                <tbody>
+                    @php
+                        $rpsData = [
+                            ['BBK1AAB4', 'ALGORITMA PEMROGRAMAN', 1, 'Wajib', '#'],
+                            ['BBK1BAB3', 'MATEMATIKA DISKRIT', 1, 'Wajib', '#'],
+                            ['BBK1EAB3', 'SISTEM ENTERPRISE', 1, 'Wajib', '#'],
+                            ['BBK1FAB3', 'DESIGN THINKING', 2, 'Wajib', '#'],
+                            ['BBK1GAB3', 'JARINGAN KOMPUTER', 2, 'Wajib', '#'],
+                            ['BBK1JAB3', 'SISTEM BASIS DATA', 2, 'Wajib', '#'],
+                        ];
+                    @endphp
 
-                <div class="rps-chart-section">
-                    <div class="rps-chart-card">
-                        <div class="chart-title">RPS <span>☰</span></div>
+                    @foreach ($rpsData as $i => $rps)
+                        <tr>
+                            <td>{{ $i + 1 }}</td>
+                            <td>{{ $rps[0] }}</td>
+                            <td>{{ $rps[1] }}</td>
+                            <td>{{ $rps[2] }}</td>
+                            <td>{{ $rps[3] }}</td>
+                            <td>
+                                <a href="{{ $rps[4] }}" class="btn btn-sm btn-secondary">
+                                    Lihat RPS
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-                        <div class="bar-chart">
-                            @php
-                                $bars = [
-                                    'PENGUJIAN',
-                                    'ksmks',
-                                    'ksmks',
-                                    'ksmks',
-                                    'ksmks',
-                                    'ksmks',
-                                    'KECERDASAN ARTIFISIAL',
-                                ];
-                            @endphp
-
-                            @foreach ($bars as $bar)
-                                <div class="bar-item">
-                                    <div class="bar-bg">
-                                        <div class="bar-fill"></div>
-                                    </div>
-                                    <span>{{ $bar }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <div class="chart-legend">
-                            <span></span> TOTAL WEEK RPS
-                        </div>
-                    </div>
-
-                    <div class="rps-chart-card">
-                        <div class="chart-title">RPS <span>☰</span></div>
-
-                        <div class="pie-chart"></div>
-
-                        <div class="pie-legend">
-                            <p><span class="c1"></span> TOTAL RPS DISAPPROVE</p>
-                            <p><span class="c2"></span> TOTAL RPS APPROVE</p>
-                            <p><span class="c3"></span> TOTAL RPS SUBMITTED</p>
-                            <p><span class="c4"></span> TOTAL RPS NO ACTION</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="rps-table-top">
-                    <div>
-                        <span class="record-box"></span>
-                        <span>Record per pages</span>
-                    </div>
-
-                    <div>
-                        <label>Search (Press Enter):</label>
-                        <input type="text">
-                    </div>
-                </div>
-
-                <div class="rps-table-wrap">
-                    <table class="rps-table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Kode Subjek</th>
-                                <th>Nama Mata Kuliah</th>
-                                <th>Semester</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @php
-                                $rps = [
-                                    ['BBK1GAB3', 'JARINGAN KOMPUTER', 1],
-                                    ['BBK3AAB3', 'ARSITEKTUR ENTERPRISE', 5],
-                                    ['UBKXBCB2', 'PANCASILA', 1],
-                                    ['BBK1FAB3', 'DESIGN THINKING', 3],
-                                    ['UBKXCCB2', 'BAHASA INDONESIA', 1],
-                                    ['BBK3HAB3', 'KECERDASAN ARTIFISIAL DAN PENERAPANNYA', 6],
-                                    ['BBK3VBB3', 'PEMERINTAHAN ELEKTRONIK DAN KOTA CERDAS', '-'],
-                                ];
-                            @endphp
-
-                            @foreach ($rps as $index => $item)
-                                <tr>
-                                    <td>{{ $index + 1 }}.</td>
-                                    <td>{{ $item[0] }}</td>
-                                    <td>{{ $item[1] }}</td>
-                                    <td>{{ $item[2] }}</td>
-                                    <td>
-                                        <button class="btn-view-rps">View RPS</button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="rps-pagination">
-                    <button>First</button>
-                    <button>Previous</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>4</button>
-                    <button>Next</button>
-                    <button>Last</button>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+        <div class="mk-pagination">
+            <button>First</button>
+            <button>Previous</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>Next</button>
+            <button>Last</button>
+        </div>
+    </section>
 @endsection

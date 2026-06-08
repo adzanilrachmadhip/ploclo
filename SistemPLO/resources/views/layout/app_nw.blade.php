@@ -15,9 +15,6 @@
         href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;700&family=Oxygen:wght@400;700&display=swap"
         rel="stylesheet">
 
-    {{-- Custom CSS --}}
-    <link rel="stylesheet" href="{{ asset('css/compass.css') }}">
-
     @yield('styles')
 </head>
 

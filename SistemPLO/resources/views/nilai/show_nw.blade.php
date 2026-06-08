@@ -4,7 +4,7 @@
 @section('headerTitle', 'Student Competency Oversight | Classroom Section Lens')
 
 @section('styles')
-    @vite(['resources/css/dashboard.css', 'resources/css/nilai.css', 'resources/css/nilai_detail.css'])
+    @vite(['resources/css/nilai.css', 'resources/css/nilai_detail.css'])
 @endsection
 
 @section('content')

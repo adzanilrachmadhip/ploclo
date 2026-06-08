@@ -2,7 +2,7 @@
 
 @section('title', 'Manage PLO Mata Kuliah')
 
-@vite(['resources/css/dashboard.css', 'resources/css/mata_kuliah.css'])
+@vite('resources/css/mata_kuliah.css')
 
 @section('content')
 

@@ -46,19 +46,19 @@ Route::middleware('auth')->group(function () {
         ->name('nilai.show');
 });
 
-Route::get('/mata-kuliah-ui', function () {
+Route::get('/mata-kuliah', function () {
     return view('mata-kuliah.index');
 })->name('mata-kuliah.index');
 
-Route::get('/mata-kuliah/lihat_mk_nw-ui', function () {
+Route::get('/mata-kuliah/lihat_mk_nw', function () {
     return view('mata-kuliah.lihat_nw');
 })->name('mata-kuliah.lihat.ui');
 
-Route::get('/mata-kuliah/manage-plo-ui', function () {
+Route::get('/mata-kuliah/manage-plo', function () {
     return view('mata-kuliah.manage_plo_nw');
 })->name('mata-kuliah.manage-plo.ui');
 
-Route::get('/rps-ui', function () {
+Route::get('/rps', function () {
     return view('rps.index_nw');
 })->name('rps.index');
 

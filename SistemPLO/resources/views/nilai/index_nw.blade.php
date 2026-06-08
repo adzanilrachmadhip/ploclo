@@ -3,7 +3,7 @@
 @section('title', 'Nilai - COMPASS')
 @section('headerTitle', 'Student Competency Oversight | Classroom Section Lens')
 @section('styles')
-    @vite(['resources/css/dashboard.css', 'resources/css/nilai.css'])
+    @vite('resources/css/nilai.css')
 @endsection
 
 @section('content')
