@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class PloController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     // Global PLO list + CRUD
     public function index()
     {
