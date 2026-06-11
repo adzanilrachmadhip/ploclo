@@ -11,31 +11,46 @@
     <main class="nilai-wrapper">
         <div class="nilai-title">Student Competency Oversight</div>
 
-        <div class="filter-section">
-            <div class="filter-item">
-                <label>Kurikulum</label>
-                <select><option>2024</option></select>
-            </div>
+        {{-- Filter — hanya tampil untuk admin/kaprodi --}}
+        @if (auth()->user()->isAdmin() || auth()->user()->isKaprodi())
+        <form method="GET" action="{{ route('nilai.index') }}" class="filter-section">
             <div class="filter-item">
                 <label>Angkatan</label>
-                <select><option>2024</option></select>
+                <select name="angkatan">
+                    <option value="">Semua</option>
+                    @foreach ($angkatanList as $thn)
+                        <option value="{{ $thn }}" {{ request('angkatan') == $thn ? 'selected' : '' }}>{{ $thn }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="filter-item">
-                <label>Periode Akademik</label>
-                <select><option>2024/1</option></select>
+                <label>Dosen Wali</label>
+                <select name="kode_dosen">
+                    <option value="">Semua</option>
+                    @foreach ($dosenList as $d)
+                        <option value="{{ $d->kode_dosen }}" {{ request('kode_dosen') == $d->kode_dosen ? 'selected' : '' }}>
+                            {{ $d->kode_dosen }} — {{ $d->nama_lengkap }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="filter-item">
-                <label>Kode Dosen</label>
-                <select><option>TRL</option></select>
+                <label>Status</label>
+                <select name="status">
+                    <option value="">Semua</option>
+                    @foreach (['Aktif','Cuti','Lulus','DO'] as $s)
+                        <option value="{{ $s }}" {{ request('status') == $s ? 'selected' : '' }}>{{ $s }}</option>
+                    @endforeach
+                </select>
             </div>
-            <button class="apply-btn">Apply</button>
+            <button type="submit" class="apply-btn">Apply</button>
+        </form>
+        @else
+        {{-- Dosen wali: tampilkan info saja --}}
+        <div class="info-box" style="margin-bottom:16px;">
+            Menampilkan mahasiswa bimbingan: <strong>{{ auth()->user()->kode_dosen }} — {{ auth()->user()->nama_lengkap }}</strong>
         </div>
-
-        <div class="info-box">
-            <strong>INFO !!!</strong><br>
-            TEMPAT INFORMASI <br>
-            | INFORMASI A | INFORMASI B | INFORMASI C | INFORMASI D |
-        </div>
+        @endif
 
         <div class="table-card">
             <div class="table-responsive">
@@ -59,7 +74,7 @@
                                 <td>{{ $row['mahasiswa']->nama }}</td>
                                 <td>{{ $row['mahasiswa']->kode_dosen ?? '-' }}</td>
                                 @foreach ($plos as $plo)
-                                    @php $nilaiPlo = $row['plos'][$plo->id_plo] ?? null; @endphp
+                                    @php $nilaiPlo = $row['plos'][$plo->id_plo] ?? '-'; @endphp
                                     <td>
                                         @if ($nilaiPlo !== '-')
                                             <a href="{{ route('nilai.show', ['idMahasiswa' => $row['mahasiswa']->id_mahasiswa, 'idPlo' => $plo->id_plo]) }}"

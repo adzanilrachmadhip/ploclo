@@ -53,6 +53,18 @@
         </a>
     </div>
 
+    <a href="{{ route('mahasiswa.index') }}" class="menu-link {{ request()->routeIs('mahasiswa.*') ? 'active' : '' }}">
+        {!! $menuIcon !!}
+        <span>Mahasiswa</span>
+    </a>
+
+    @if (auth()->user()->isAdmin() || auth()->user()->isKaprodi())
+    <a href="{{ route('users.index') }}" class="menu-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+        {!! $menuIcon !!}
+        <span>Manajemen User</span>
+    </a>
+    @endif
+
     @php $kurikulumOpen = request()->routeIs('plo.*') || request()->routeIs('assessment-tools.*'); @endphp
     <a href="#" class="menu-link menu-toggle {{ $kurikulumOpen ? 'active' : '' }}"
        onclick="toggleSubmenu(event, 'submenu-kurikulum')">

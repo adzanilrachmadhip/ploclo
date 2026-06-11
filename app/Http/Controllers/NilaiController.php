@@ -8,6 +8,7 @@ use App\Models\Mahasiswa;
 use App\Models\MataKuliah;
 use App\Models\NilaiMahasiswa;
 use App\Models\Plo;
+use App\Models\User;
 use App\Services\PloCalculationService;
 use Illuminate\Http\Request;
 
@@ -15,16 +16,25 @@ class NilaiController extends Controller
 {
     public function index(Request $request, PloCalculationService $service)
     {
-        $mahasiswas = Mahasiswa::query()
-            ->when($request->filled('angkatan'), fn ($q) => $q->where('tahun_masuk', $request->angkatan))
-            ->when($request->filled('kode_dosen'), fn ($q) => $q->where('kode_dosen', $request->kode_dosen))
-            ->orderBy('nama')
-            ->get();
+        $user  = auth()->user();
+        $query = Mahasiswa::query();
 
-        $plos = Plo::orderBy('id_plo')->get();
+        // Dosen wali hanya bisa lihat mahasiswa bimbingannya sendiri
+        if ($user->isDosenWali()) {
+            $query->where('kode_dosen', $user->kode_dosen);
+        } else {
+            // Admin/Kaprodi bisa filter bebas
+            $query->when($request->filled('kode_dosen'), fn($q) => $q->where('kode_dosen', $request->kode_dosen));
+        }
+
+        $query->when($request->filled('angkatan'), fn($q) => $q->where('tahun_masuk', $request->angkatan))
+              ->when($request->filled('status'),   fn($q) => $q->where('status', $request->status));
+
+        $mahasiswas = $query->orderBy('nama')->get();
+        $plos       = Plo::orderBy('id_plo')->get();
 
         $rows = $mahasiswas->map(function ($mahasiswa) use ($service, $plos) {
-            $result = $service->calculate($mahasiswa->id_mahasiswa);
+            $result     = $service->calculate($mahasiswa->id_mahasiswa);
             $ploResults = collect($result['plo_results']);
 
             return [
@@ -36,7 +46,11 @@ class NilaiController extends Controller
             ];
         });
 
-        return view('nilai.index_nw', compact('rows', 'plos'));
+        // Data untuk dropdown filter
+        $angkatanList = Mahasiswa::select('tahun_masuk')->distinct()->orderBy('tahun_masuk', 'desc')->pluck('tahun_masuk');
+        $dosenList    = User::where('role', 'dosen wali')->whereNotNull('kode_dosen')->orderBy('kode_dosen')->get(['kode_dosen', 'nama_lengkap']);
+
+        return view('nilai.index_nw', compact('rows', 'plos', 'angkatanList', 'dosenList'));
     }
 
     public function inputForm(Request $request)

@@ -19,6 +19,10 @@
 | 2026-06-11 | CRUD PLO & CLO | ✅ Selesai | `PloController` + `CloController`, view `/plo/index_nw`, `manage_plo_nw` dynamic (CLO+mapping), sidebar link PLO |
 | 2026-06-11 | CRUD Assessment Tools | ✅ Selesai | `AssessmentToolController`, view per CLO+MK, indikator total bobot, sidebar "Kurikulum" submenu |
 | 2026-06-11 | Input Nilai Mahasiswa | ✅ Selesai | `/nilai/input` — flow 3-step: pilih MK → pilih AT → input batch nilai, `updateOrCreate` |
+| 2026-06-11 | Manajemen User | ✅ Selesai | `UserController` CRUD + reset password, role-badge, kode_dosen toggle |
+| 2026-06-11 | CRUD Mahasiswa | ✅ Selesai | `MahasiswaController` CRUD + filter angkatan/dosen/status/search |
+| 2026-06-11 | Filter Nilai Dinamis | ✅ Selesai | Dropdown angkatan, dosen wali, status dari DB; dosen wali auto-filter ke mahasiswa sendiri |
+| 2026-06-11 | Role-based UI | ✅ Selesai | Tombol hapus/tambah/edit disembunyikan untuk dosen wali; menu User hanya admin/kaprodi |
 
 ---
 

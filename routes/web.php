@@ -8,6 +8,8 @@ use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\PloController;
 use App\Http\Controllers\CloController;
 use App\Http\Controllers\AssessmentToolController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\Auth\JwtAuthController;
 use App\Http\Middleware\JwtMiddleware;
 use App\Http\Middleware\RoleMiddleware;
@@ -51,6 +53,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/assessment-tools', [AssessmentToolController::class, 'store'])->name('assessment-tools.store');
     Route::put('/assessment-tools/{id}', [AssessmentToolController::class, 'update'])->name('assessment-tools.update');
     Route::delete('/assessment-tools/{id}', [AssessmentToolController::class, 'destroy'])->name('assessment-tools.destroy');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
+    Route::post('/mahasiswa', [MahasiswaController::class, 'store'])->name('mahasiswa.store');
+    Route::put('/mahasiswa/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
+    Route::delete('/mahasiswa/{id}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
 
     Route::get('/rps', function () {
         return view('rps.index_nw');
