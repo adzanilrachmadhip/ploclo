@@ -18,10 +18,22 @@
         <span>Dashboard</span>
     </a>
 
-    <a href="{{ route('nilai.index') }}" class="menu-link {{ request()->routeIs('nilai.*') ? 'active' : '' }}">
+    @php $nilaiOpen = request()->routeIs('nilai.*'); @endphp
+    <a href="#" class="menu-link menu-toggle {{ $nilaiOpen ? 'active' : '' }}"
+       onclick="toggleSubmenu(event, 'submenu-nilai')">
         {!! $menuIcon !!}
         <span>Nilai</span>
     </a>
+    <div id="submenu-nilai" class="submenu {{ $nilaiOpen ? 'show' : '' }}">
+        <a href="{{ route('nilai.index') }}"
+           class="submenu-link {{ request()->routeIs('nilai.index') ? 'active' : '' }}">
+            Lihat Nilai
+        </a>
+        <a href="{{ route('nilai.input') }}"
+           class="submenu-link {{ request()->routeIs('nilai.input') ? 'active' : '' }}">
+            Input Nilai
+        </a>
+    </div>
 
     @php $mataKuliahOpen = request()->routeIs('mata-kuliah.*'); @endphp
     <a href="#" class="menu-link menu-toggle {{ $mataKuliahOpen ? 'active' : '' }}"
@@ -41,10 +53,22 @@
         </a>
     </div>
 
-    <a href="{{ route('plo.index') }}" class="menu-link {{ request()->routeIs('plo.*') ? 'active' : '' }}">
+    @php $kurikulumOpen = request()->routeIs('plo.*') || request()->routeIs('assessment-tools.*'); @endphp
+    <a href="#" class="menu-link menu-toggle {{ $kurikulumOpen ? 'active' : '' }}"
+       onclick="toggleSubmenu(event, 'submenu-kurikulum')">
         {!! $menuIcon !!}
-        <span>PLO</span>
+        <span>Kurikulum</span>
     </a>
+    <div id="submenu-kurikulum" class="submenu {{ $kurikulumOpen ? 'show' : '' }}">
+        <a href="{{ route('plo.index') }}"
+           class="submenu-link {{ request()->routeIs('plo.*') ? 'active' : '' }}">
+            Kelola PLO
+        </a>
+        <a href="{{ route('assessment-tools.index') }}"
+           class="submenu-link {{ request()->routeIs('assessment-tools.*') ? 'active' : '' }}">
+            Assessment Tools
+        </a>
+    </div>
 
     <a href="{{ route('rps.index') }}" class="menu-link {{ request()->routeIs('rps.*') ? 'active' : '' }}">
         {!! $menuIcon !!}

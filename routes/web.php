@@ -7,6 +7,7 @@ use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\PloController;
 use App\Http\Controllers\CloController;
+use App\Http\Controllers\AssessmentToolController;
 use App\Http\Controllers\Auth\JwtAuthController;
 use App\Http\Middleware\JwtMiddleware;
 use App\Http\Middleware\RoleMiddleware;
@@ -22,6 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
+    Route::get('/nilai/input', [NilaiController::class, 'inputForm'])->name('nilai.input');
+    Route::post('/nilai/input', [NilaiController::class, 'storeOrUpdate'])->name('nilai.store');
     Route::get('/nilai/{idMahasiswa}/plo/{idPlo}', [NilaiController::class, 'show'])->name('nilai.show');
 
     Route::get('/mata-kuliah', [MataKuliahController::class, 'index'])->name('mata-kuliah.index');
@@ -43,6 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/clo', [CloController::class, 'store'])->name('clo.store');
     Route::put('/clo/{id}', [CloController::class, 'update'])->name('clo.update');
     Route::delete('/clo/{id}', [CloController::class, 'destroy'])->name('clo.destroy');
+
+    Route::get('/assessment-tools', [AssessmentToolController::class, 'index'])->name('assessment-tools.index');
+    Route::post('/assessment-tools', [AssessmentToolController::class, 'store'])->name('assessment-tools.store');
+    Route::put('/assessment-tools/{id}', [AssessmentToolController::class, 'update'])->name('assessment-tools.update');
+    Route::delete('/assessment-tools/{id}', [AssessmentToolController::class, 'destroy'])->name('assessment-tools.destroy');
 
     Route::get('/rps', function () {
         return view('rps.index_nw');

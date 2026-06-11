@@ -16,9 +16,9 @@
 | 2026-06-11 | DatabaseSeeder | ✅ Selesai | 4 user, 3 PLO, 3 MK, 6 CLO, 8 pivot, 12 AT, 5 mahasiswa, 60 nilai. `php artisan db:seed` sukses |
 | 2026-06-11 | Dashboard dinamis | ✅ Selesai | `HomeController` query real PLO dari DB + avg score per PLO lintas semua mahasiswa |
 | 2026-06-11 | CRUD Mata Kuliah | ✅ Selesai | `MataKuliahController` (index/store/update/destroy), view dinamis, filter + search, modal tambah/edit/hapus |
-| — | CRUD PLO & CLO | 🔲 Belum | Priority #6 |
-| — | CRUD Assessment Tools | 🔲 Belum | Priority #7 |
-| — | Input/Import Nilai | 🔲 Belum | Priority #8 |
+| 2026-06-11 | CRUD PLO & CLO | ✅ Selesai | `PloController` + `CloController`, view `/plo/index_nw`, `manage_plo_nw` dynamic (CLO+mapping), sidebar link PLO |
+| 2026-06-11 | CRUD Assessment Tools | ✅ Selesai | `AssessmentToolController`, view per CLO+MK, indikator total bobot, sidebar "Kurikulum" submenu |
+| 2026-06-11 | Input Nilai Mahasiswa | ✅ Selesai | `/nilai/input` — flow 3-step: pilih MK → pilih AT → input batch nilai, `updateOrCreate` |
 
 ---
 
@@ -258,9 +258,9 @@ Semua halaman pakai `@vite('resources/css/...')`. Jalankan `npm run build` atau 
 3. [TEST]       Akses /nilai untuk verify PloCalculationService bekerja dengan data real ✅
 4. [DASHBOARD]  Update HomeController: Plo::all() + hitung avg PLO dari semua mahasiswa ✅
 5. [MK-CRUD]    Buat MataKuliahController (index/store/update/destroy) + update routes ✅
-6. [PLO-CRUD]   Buat PloController + halaman manage PLO/CLO
-7. [AT-CRUD]    Buat AssessmentToolController + form per CLO
-8. [NILAI-INPUT] Form input nilai per mahasiswa per AT, atau Excel import
+6. [PLO-CRUD]   Buat PloController + halaman manage PLO/CLO ✅
+7. [AT-CRUD]    Buat AssessmentToolController + form per CLO ✅
+8. [NILAI-INPUT] Form input nilai per mahasiswa per AT, atau Excel import ✅
 9. [ROLE-UI]    Tambah @if(auth()->user()->isAdmin()) di view untuk conditional UI
 10. [DATA-AKD]  Buat migration data_akademik + hubungkan ke filter halaman Nilai
 ```
