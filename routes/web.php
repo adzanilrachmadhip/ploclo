@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\MataKuliahController;
+use App\Http\Controllers\PloController;
+use App\Http\Controllers\CloController;
 use App\Http\Controllers\Auth\JwtAuthController;
 use App\Http\Middleware\JwtMiddleware;
 use App\Http\Middleware\RoleMiddleware;
@@ -21,17 +24,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
     Route::get('/nilai/{idMahasiswa}/plo/{idPlo}', [NilaiController::class, 'show'])->name('nilai.show');
 
-    Route::get('/mata-kuliah', function () {
-        return view('mata-kuliah.index');
-    })->name('mata-kuliah.index');
+    Route::get('/mata-kuliah', [MataKuliahController::class, 'index'])->name('mata-kuliah.index');
+    Route::post('/mata-kuliah', [MataKuliahController::class, 'store'])->name('mata-kuliah.store');
+    Route::put('/mata-kuliah/{id}', [MataKuliahController::class, 'update'])->name('mata-kuliah.update');
+    Route::delete('/mata-kuliah/{id}', [MataKuliahController::class, 'destroy'])->name('mata-kuliah.destroy');
 
-    Route::get('/mata-kuliah/lihat', function () {
-        return view('mata-kuliah.lihat_nw');
-    })->name('mata-kuliah.lihat.ui');
+    Route::get('/mata-kuliah/lihat', [MataKuliahController::class, 'lihat'])->name('mata-kuliah.lihat.ui');
 
-    Route::get('/mata-kuliah/manage-plo', function () {
-        return view('mata-kuliah.manage_plo_nw');
-    })->name('mata-kuliah.manage-plo.ui');
+    Route::get('/mata-kuliah/manage-plo', [PloController::class, 'managePlo'])->name('mata-kuliah.manage-plo.ui');
+    Route::post('/plo-mapping', [PloController::class, 'attachClo'])->name('plo-mapping.attach');
+    Route::delete('/plo-mapping/{pivotId}', [PloController::class, 'detachClo'])->name('plo-mapping.detach');
+
+    Route::get('/plo', [PloController::class, 'index'])->name('plo.index');
+    Route::post('/plo', [PloController::class, 'store'])->name('plo.store');
+    Route::put('/plo/{id}', [PloController::class, 'update'])->name('plo.update');
+    Route::delete('/plo/{id}', [PloController::class, 'destroy'])->name('plo.destroy');
+
+    Route::post('/clo', [CloController::class, 'store'])->name('clo.store');
+    Route::put('/clo/{id}', [CloController::class, 'update'])->name('clo.update');
+    Route::delete('/clo/{id}', [CloController::class, 'destroy'])->name('clo.destroy');
 
     Route::get('/rps', function () {
         return view('rps.index_nw');

@@ -41,6 +41,11 @@
         </a>
     </div>
 
+    <a href="{{ route('plo.index') }}" class="menu-link {{ request()->routeIs('plo.*') ? 'active' : '' }}">
+        {!! $menuIcon !!}
+        <span>PLO</span>
+    </a>
+
     <a href="{{ route('rps.index') }}" class="menu-link {{ request()->routeIs('rps.*') ? 'active' : '' }}">
         {!! $menuIcon !!}
         <span>RPS</span>

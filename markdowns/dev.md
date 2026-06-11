@@ -5,6 +5,23 @@
 
 ---
 
+## ACTIVE REPORT (Log Kemajuan)
+
+| Tanggal | Item | Status | Catatan |
+|---------|------|--------|---------|
+| 2026-06-11 | Branch reorganization | ✅ Selesai | `backend_sistem/` → `back-end`, `frontend_sistem/` → `front-end` via git worktree |
+| 2026-06-11 | Adopsi views SistemPLO | ✅ Selesai | Semua view, CSS, controller, model, middleware dari commit `33bab1c` di-port ke Laravel 12 |
+| 2026-06-11 | Auth (Session + JWT) | ✅ Selesai | `LoginController`, `JwtAuthController`, `JwtMiddleware`, `RoleMiddleware`, `firebase/php-jwt ^6.10` |
+| 2026-06-11 | PloCalculationService | ✅ Selesai | Verified: PLO01=85.67, PLO02=85.15, PLO03=86.4 untuk mahasiswa #1 (Andi Pratama) |
+| 2026-06-11 | DatabaseSeeder | ✅ Selesai | 4 user, 3 PLO, 3 MK, 6 CLO, 8 pivot, 12 AT, 5 mahasiswa, 60 nilai. `php artisan db:seed` sukses |
+| 2026-06-11 | Dashboard dinamis | ✅ Selesai | `HomeController` query real PLO dari DB + avg score per PLO lintas semua mahasiswa |
+| 2026-06-11 | CRUD Mata Kuliah | ✅ Selesai | `MataKuliahController` (index/store/update/destroy), view dinamis, filter + search, modal tambah/edit/hapus |
+| — | CRUD PLO & CLO | 🔲 Belum | Priority #6 |
+| — | CRUD Assessment Tools | 🔲 Belum | Priority #7 |
+| — | Input/Import Nilai | 🔲 Belum | Priority #8 |
+
+---
+
 ## 1. Konteks Proyek
 
 **COMPASS** (Computarized Automatization PLO System) adalah sistem penilaian OBE (Outcome-Based Education) untuk Program Studi S1 Sistem Informasi Telkom University Surabaya.
@@ -236,11 +253,11 @@ Semua halaman pakai `@vite('resources/css/...')`. Jalankan `npm run build` atau 
 ## 10. Alur Pengerjaan Selanjutnya (Recommended)
 
 ```
-1. [SETUP]      composer install + migrate + .env (DB + JWT_SECRET)
-2. [SEEDER]     Buat DatabaseSeeder: 1 user admin, 3 PLO, 3 MK, CLO, AT, 5 mahasiswa, nilai
-3. [TEST]       Akses /nilai untuk verify PloCalculationService bekerja dengan data real
-4. [DASHBOARD]  Update HomeController: Plo::all() + hitung avg PLO dari semua mahasiswa
-5. [MK-CRUD]    Buat MataKuliahController (index/store/update/destroy) + update routes
+1. [SETUP]      composer install + migrate + .env (DB + JWT_SECRET) ✅
+2. [SEEDER]     Buat DatabaseSeeder: 1 user admin, 3 PLO, 3 MK, CLO, AT, 5 mahasiswa, nilai ✅
+3. [TEST]       Akses /nilai untuk verify PloCalculationService bekerja dengan data real ✅
+4. [DASHBOARD]  Update HomeController: Plo::all() + hitung avg PLO dari semua mahasiswa ✅
+5. [MK-CRUD]    Buat MataKuliahController (index/store/update/destroy) + update routes ✅
 6. [PLO-CRUD]   Buat PloController + halaman manage PLO/CLO
 7. [AT-CRUD]    Buat AssessmentToolController + form per CLO
 8. [NILAI-INPUT] Form input nilai per mahasiswa per AT, atau Excel import

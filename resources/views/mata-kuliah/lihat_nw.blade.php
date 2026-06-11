@@ -11,16 +11,15 @@
     <section class="mk-wrapper">
         <div class="mk-title">Lihat Mata Kuliah</div>
 
-        <div class="mk-table-top">
+        <form method="GET" action="{{ route('mata-kuliah.lihat.ui') }}" class="mk-table-top" style="margin-bottom:16px;">
             <div>
-                <span class="record-box"></span>
-                <span>Record per pages</span>
+                <span>{{ $matkul->count() }} record(s)</span>
             </div>
             <div>
                 <label>Search (Press Enter):</label>
-                <input type="text">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Kode / Nama MK">
             </div>
-        </div>
+        </form>
 
         <div class="mk-table-wrap">
             <table class="mk-table mk-lihat-table">
@@ -31,42 +30,28 @@
                         <th>Nama Mata Kuliah</th>
                         <th>Program Studi</th>
                         <th>Semester</th>
-                        <th>Tahun Akademik</th>
+                        <th>Tahun Kurikulum</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                        $data = [
-                            ['UBKXBCB2', 'PANCASILA', 'S1 Sistem Informasi - Kampus Surabaya', 8, 2425],
-                            ['BBK1GAB3', 'JARINGAN KOMPUTER', 'S1 Sistem Informasi - Kampus Surabaya', 2, 2425],
-                            ['UAKXACB2', 'AGAMA ISLAM', 'S1 Sistem Informasi - Kampus Surabaya', 1, 2425],
-                            ['BBK1AAB4', 'ALGORITMA PEMROGRAMAN', 'S1 Sistem Informasi - Kampus Surabaya', 1, 2425],
-                            ['BBK1BAB3', 'MATEMATIKA DISKRIT', 'S1 Sistem Informasi - Kampus Surabaya', 1, 2425],
-                            ['BBK1FAB3', 'DESIGN THINKING', 'S1 Sistem Informasi - Kampus Surabaya', 2, 2425],
-                            ['BBK1JAB3', 'SISTEM BASIS DATA', 'S1 Sistem Informasi - Kampus Surabaya', 2, 2425],
-                        ];
-                    @endphp
-                    @foreach ($data as $i => $mk)
+                    @forelse ($matkul as $i => $mk)
                         <tr>
                             <td>{{ $i + 1 }}</td>
-                            <td>{{ $mk[0] }}</td>
-                            <td>{{ $mk[1] }}</td>
-                            <td>{{ $mk[2] }}</td>
-                            <td>{{ $mk[3] }}</td>
-                            <td>{{ $mk[4] }}</td>
+                            <td>{{ $mk->kode_mk }}</td>
+                            <td>{{ $mk->nama_matakuliah }}</td>
+                            <td>S1 Sistem Informasi - Kampus Surabaya</td>
+                            <td>{{ $mk->semester }}</td>
+                            <td>{{ $mk->tahun_kurikulum }}</td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr><td colspan="6" style="text-align:center;">Belum ada mata kuliah.</td></tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
 
         <div class="mk-pagination">
-            <button>First</button>
-            <button>Previous</button>
-            <button class="active">1</button>
-            <button>2</button>
-            <button>Next</button>
-            <button>Last</button>
+            <span style="padding:8px 12px;">Showing {{ $matkul->count() }} entries</span>
         </div>
     </section>
 @endsection

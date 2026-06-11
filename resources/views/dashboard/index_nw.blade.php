@@ -14,14 +14,19 @@
             <p class="period-text">Tahun : 2425/1 Genap ⌄</p>
         </div>
 
+        @php
+            $avgPlo = count($ploData) > 0
+                ? number_format(array_sum(array_column($ploData, 'value')) / count($ploData), 2)
+                : '0.00';
+        @endphp
         <div class="stat-grid">
             <div class="stat-card">
                 <p>Total Mahasiswa</p>
-                <h2>150</h2>
+                <h2>{{ $totalMahasiswa }}</h2>
             </div>
             <div class="stat-card">
                 <p>Rata-Rata Ketercapaian PLO%</p>
-                <h2>53,6%</h2>
+                <h2>{{ $avgPlo }}%</h2>
             </div>
         </div>
 

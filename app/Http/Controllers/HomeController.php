@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mahasiswa;
+use App\Models\Plo;
+use App\Services\PloCalculationService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,25 +14,40 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(PloCalculationService $service)
     {
-        $ploData = [
-            ['label' => 'PLO 1 [PLO01]',  'value' => 67.02, 'color' => '#A0BCE8'],
-            ['label' => 'PLO 2 [PLO02]',  'value' => 58.12, 'color' => '#6BE6D3'],
-            ['label' => 'PLO 3 [PLO03]',  'value' => 53.27, 'color' => '#000000'],
-            ['label' => 'PLO 4 [PLO04]',  'value' => 65.82, 'color' => '#7DBBFF'],
-            ['label' => 'PLO 5 [PLO05]',  'value' => 52.68, 'color' => '#000000'],
-            ['label' => 'PLO 6 [PLO06]',  'value' => 56.44, 'color' => '#000000'],
-            ['label' => 'PLO 7 [PLO07]',  'value' => 33.39, 'color' => '#000000'],
-            ['label' => 'PLO 8 [PLO08]',  'value' => 68.00, 'color' => '#000000'],
-            ['label' => 'PLO 9 [PLO09]',  'value' => 65.89, 'color' => '#000000'],
-            ['label' => 'PLO 10 [PLO010]', 'value' => 65.89, 'color' => '#000000'],
-        ];
+        $plos = Plo::all();
+        $mahasiswas = Mahasiswa::all();
 
+        // Palette warna per PLO (cycling)
+        $colors = ['#A0BCE8', '#6BE6D3', '#7DBBFF', '#F4A261', '#E76F51', '#8ECAE6', '#219EBC', '#023047', '#FFB703', '#FB8500'];
+
+        // Hitung rata-rata final_plo_score lintas semua mahasiswa per PLO
+        $ploData = $plos->map(function ($plo, $i) use ($mahasiswas, $service, $colors) {
+            $scores = [];
+            foreach ($mahasiswas as $mahasiswa) {
+                $result = $service->calculate($mahasiswa->id_mahasiswa);
+                foreach ($result['plo_results'] as $ploResult) {
+                    if ($ploResult['id_plo'] === $plo->id_plo) {
+                        $scores[] = $ploResult['final_plo_score'];
+                        break;
+                    }
+                }
+            }
+            $avg = count($scores) > 0 ? round(array_sum($scores) / count($scores), 2) : 0;
+
+            return [
+                'label' => $plo->nama_plo . ' [' . $plo->nama_plo . ']',
+                'value' => $avg,
+                'color' => $colors[$i % count($colors)],
+            ];
+        })->values()->toArray();
+
+        $totalMahasiswa = $mahasiswas->count();
         $chartMax = 100;
         $yAxisTicks = [75, 50, 25, 0];
         $user = auth()->user();
 
-        return view('dashboard.index_nw', compact('ploData', 'chartMax', 'yAxisTicks', 'user'));
+        return view('dashboard.index_nw', compact('ploData', 'chartMax', 'yAxisTicks', 'user', 'totalMahasiswa'));
     }
 }

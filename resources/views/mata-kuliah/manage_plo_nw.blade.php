@@ -1,6 +1,6 @@
 @extends('layout.app_nw')
 
-@section('title', 'Manage PLO Mata Kuliah')
+@section('title', 'Manage PLO Mata Kuliah - COMPASS')
 @section('headerTitle', 'Mata Kuliah')
 
 @section('styles')
@@ -8,561 +8,216 @@
 @endsection
 
 @section('content')
+    <section class="mk-wrapper">
+        <div class="mk-title">Manage CLO & Mapping PLO</div>
 
-    <div class="mk-wrapper">
+        @if (session('success'))
+            <div class="mk-alert-success" style="display:block;">{{ session('success') }}</div>
+        @endif
+        @if (session('error'))
+            <div class="mk-alert-success" style="display:block;background:#f8d7da;color:#721c24;border-color:#f5c6cb;">{{ session('error') }}</div>
+        @endif
 
-        {{-- CONTENT --}}
-            <header class="dashboard-header">
-                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+        {{-- Filter: pilih MK --}}
+        <form method="GET" action="{{ route('mata-kuliah.manage-plo.ui') }}" class="mk-filter">
+            <div class="filter-row">
+                <label>Mata Kuliah</label>
+                <select name="id_mk" onchange="this.form.submit()">
+                    <option value="">-- Pilih Mata Kuliah --</option>
+                    @foreach ($matkuls as $mk)
+                        <option value="{{ $mk->id_mk }}" {{ $idMk == $mk->id_mk ? 'selected' : '' }}>
+                            {{ $mk->kode_mk }} — {{ $mk->nama_matakuliah }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </form>
 
-                <h1>Mata Kuliah</h1>
+        @if ($selectedMk)
+            <div class="mk-info-box">
+                <strong>{{ $selectedMk->kode_mk }}</strong> — {{ $selectedMk->nama_matakuliah }}
+                | SKS: {{ $selectedMk->sks }} | Semester: {{ $selectedMk->semester }}
+            </div>
 
-                <div class="header-actions">
-                    <input type="text" placeholder="Search">
+            {{-- Tambah CLO --}}
+            <div style="margin-bottom:12px;">
+                <button type="button" class="mk-apply-btn" onclick="openAddCloModal()">+ Tambah CLO</button>
+            </div>
 
-                    <span class="notif">3</span>
-                    <div class="avatar"></div>
-                    <span>⌄</span>
-                </div>
-            </header>
-
-            {{-- CONTENT --}}
-            <section class="mk-wrapper">
-
-                <div class="mk-title-bar">
-                    <span>📝</span>
-                    <p>Kelola Mata Kuliah</p>
-                </div>
-
-                {{-- FILTER --}}
-                <div class="mk-filter-area">
-
-                    <div class="mk-filter-group">
-                        <label>Tahun Kurikulum</label>
-
-                        <select>
-                            <option>2024</option>
-                        </select>
-                    </div>
-
-                    <div class="mk-filter-group">
-                        <label>Kode Mata Kuliah</label>
-
-                        <select>
-                            <option>BBK1AAB4</option>
-                        </select>
-                    </div>
-
-                    <div class="mk-filter-group">
-                        <label>Nama Mata Kuliah</label>
-
-                        <select>
-                            <option>ALGORITMA DAN PEMROGRAMAN</option>
-                        </select>
-                    </div>
-
-                </div>
-
-                {{-- INFO --}}
-                <div class="mk-info-box">
-                    Tempat Info
-                </div>
-
-                {{-- ADD BUTTON --}}
-                <div class="mk-add-btn-wrap">
-                    <button type="button" class="mk-add-btn" onclick="openAddPloModal()">
-                        + Add PLO
-                    </button>
-                </div>
-
-                {{-- ALERT --}}
-                <div class="mk-alert-success"></div>
-
-                {{-- TABLE TOP --}}
-                <div class="mk-table-top">
-                    <div class="record-pages">
-                        <span class="record-box"></span>
-                        <p>Record per pages</p>
-                    </div>
-
-                    <div class="table-search">
-                        <label>Search (Press Enter):</label>
-                        <input type="text">
-                    </div>
-                </div>
-
-                {{-- TABLE --}}
-                <div class="mk-table-wrapper">
-
-                    <table class="mk-table">
-
-                        <thead>
+            {{-- Tabel CLO + Mapping PLO --}}
+            <div class="mk-table-wrap">
+                <table class="mk-table">
+                    <thead>
+                        <tr>
+                            <th>CLO</th>
+                            <th>Deskripsi</th>
+                            <th>Mapping PLO</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($cloList as $clo)
                             <tr>
-                                <th>No</th>
-                                <th>PLO</th>
-                                <th>Total CLO</th>
-                                <th>Status Aktif PLO Pemetaan</th>
-                                <th>Status Aktif PLO</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            <tr>
-                                <td>1</td>
-
-                                <td class="plo-desc">
-                                    PLO 01 Mampu menganalisis permasalahan infokom
-                                    yang kompleks, mendefinisikan, dan memodelkan
-                                    kebutuhan dalam konteks enterprise atau masyarakat
-                                    dengan menerapkan ilmu dan pengetahuan dalam bidang
-                                    komputasi, teknologi informasi dan komunikasi,
-                                    dan disiplin lain yang relevan
+                                <td><strong>{{ $clo->nama_clo }}</strong></td>
+                                <td style="max-width:280px;white-space:normal;">{{ $clo->description_clo }}</td>
+                                <td>
+                                    @foreach ($clo->plos as $plo)
+                                        <span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:#e8f0fe;border-radius:12px;font-size:0.82em;">
+                                            {{ $plo->nama_plo }} ({{ $plo->pivot->percentage_weight }}%)
+                                            <form method="POST" action="{{ route('plo-mapping.detach', $plo->pivot->id_pivot) }}"
+                                                style="display:inline;"
+                                                onsubmit="return confirm('Hapus mapping {{ $clo->nama_clo }} → {{ $plo->nama_plo }}?')">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" style="background:none;border:none;color:#e74c3c;cursor:pointer;font-weight:bold;padding:0 2px;">×</button>
+                                            </form>
+                                        </span>
+                                    @endforeach
+                                    <button type="button"
+                                        style="font-size:0.78em;padding:2px 8px;background:#28a745;color:#fff;border:none;border-radius:12px;cursor:pointer;"
+                                        onclick="openAddMappingModal({{ $clo->id_clo }}, '{{ $clo->nama_clo }}')">
+                                        + PLO
+                                    </button>
                                 </td>
-
-                                <td>30</td>
-
-                                <td>Active</td>
-
-                                <td>Active</td>
-
                                 <td>
                                     <div class="action-group">
-                                        <button type="button" class="btn-edit btn-edit-plo"
-                                            onclick="openEditPloModal(this)"
-                                            data-fakultas="Fakultas Rekayasa Industri"
-                                            data-prodi="S1 Sistem Informasi"
-                                            data-kurikulum="2024"
-                                            data-nomor="1"
-                                            data-deskripsi="PLO 01 Mampu menganalisis permasalahan infokom yang kompleks, mendefinisikan, dan memodelkan kebutuhan dalam konteks enterprise atau masyarakat dengan menerapkan ilmu dan pengetahuan dalam bidang komputasi, teknologi informasi dan komunikasi, dan disiplin lain yang relevan"
-                                            data-status-mapping="Active"
-                                            data-status-plo="Active">
+                                        <button type="button" class="btn-edit"
+                                            onclick="openEditCloModal({{ $clo->id_clo }}, '{{ $clo->nama_clo }}', '{{ addslashes($clo->description_clo) }}')">
                                             Edit
                                         </button>
+                                        <form method="POST" action="{{ route('clo.destroy', $clo->id_clo) }}"
+                                            style="display:inline;"
+                                            onsubmit="return confirm('Hapus CLO {{ $clo->nama_clo }}? Semua mapping & nilai terkait juga terhapus.')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="btn-detail" style="background:#e74c3c;color:#fff;">Hapus</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
-
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-                <div class="mk-pagination">
-
-                    <button>First</button>
-                    <button>Previous</button>
-
-                    <button class="active">1</button>
-
-                    <button>2</button>
-                    <button>3</button>
-                    <button>4</button>
-
-                    <button>Next</button>
-                    <button>Last</button>
-
-                </div>
-
-            </section>
-
-        </main>
-
-    </div>
-
-    <div id="sidebarOverlay" class="sidebar-overlay"></div>
-
-    <script>
-        function toggleSidebar() {
-            document.querySelector('.dashboard-sidebar').classList.toggle('show');
-            document.querySelector('.sidebar-overlay').classList.toggle('show');
-        }
-    </script>
-
-    <div id="detailAtModal" class="modal-overlay">
-        <div class="detail-at-modal">
-
-            <div class="modal-header-custom">
-                <h3>Detail Assessment Tools</h3>
-
-                <button type="button" onclick="closeDetailAtModal()">
-                    ×
-                </button>
-            </div>
-
-            <div class="detail-top-form">
-
-                <div class="detail-form-row">
-                    <label>Kode Mata Kuliah</label>
-
-                    <select>
-                        <option>BBK1AAB4</option>
-                    </select>
-                </div>
-
-                <div class="detail-form-row">
-                    <label>Tahun Akademik</label>
-
-                    <select>
-                        <option>2024/2024 - Genap</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="detail-table-wrap">
-
-                <table class="detail-at-table">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Assessment Tools</th>
-                            <th>Persentase</th>
-                            <th>Nama Komponen</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-                            <td>1</td>
-                            <td>UAS CLO 1</td>
-                            <td>10</td>
-                            <td>Ujian Akhir Semester</td>
-                        </tr>
-
-                        <tr>
-                            <td>2</td>
-                            <td>TUGAS 2 CLO 6</td>
-                            <td>5</td>
-                            <td>Tugas</td>
-                        </tr>
-
-                        <tr>
-                            <td>3</td>
-                            <td>QUIZ 2 CLO 6</td>
-                            <td>10</td>
-                            <td>Tugas Akhir</td>
-                        </tr>
-
-                        <tr>
-                            <td>4</td>
-                            <td>TUGAS 2 CLO 1</td>
-                            <td>5</td>
-                            <td>Tugas</td>
-                        </tr>
-
-                        <tr>
-                            <td>5</td>
-                            <td>QUIZ 2 CLO 1</td>
-                            <td>5</td>
-                            <td>Tugas Akhir</td>
-                        </tr>
-
+                        @empty
+                            <tr><td colspan="4" style="text-align:center;">Belum ada CLO untuk mata kuliah ini.</td></tr>
+                        @endforelse
                     </tbody>
                 </table>
-
             </div>
+        @else
+            <div class="mk-info-box">Pilih mata kuliah untuk melihat dan mengelola CLO & mapping PLO.</div>
+        @endif
 
-            <div class="detail-footer">
-
-                <p>Showing 1 to 5 of 5 entries</p>
-
-                <button type="button" class="btn-close-detail" onclick="closeDetailAtModal()">
-                    Close
-                </button>
-
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        function openDetailAtModal() {
-            document
-                .getElementById('detailAtModal')
-                .classList.add('show');
-        }
-
-        function closeDetailAtModal() {
-            document
-                .getElementById('detailAtModal')
-                .classList.remove('show');
-        }
-    </script>
-
-    <!-- add plo -->
-    <div id="addPloModal" class="modal-overlay">
-        <div class="add-plo-modal">
-
-            <div class="modal-header-custom">
-                <h3>Tambah PLO</h3>
-                <button type="button" onclick="closeAddPloModal()">×</button>
-            </div>
-
-            <div class="add-plo-body">
-
-                <div class="add-plo-row">
-                    <label>Fakultas</label>
-                    <select>
-                        <option>Fakultas Rekayasa Industri</option>
-                    </select>
+        {{-- MODAL TAMBAH CLO --}}
+        <div id="addCloModal" class="modal-overlay">
+            <div class="edit-mk-modal">
+                <div class="modal-header-custom edit-modal-header">
+                    <h3>Tambah CLO</h3>
+                    <button type="button" onclick="closeAddCloModal()">×</button>
                 </div>
-
-                <div class="add-plo-row">
-                    <label>Program Studi</label>
-                    <select>
-                        <option>S1 Sistem Informasi</option>
-                    </select>
-                </div>
-
-                <div class="add-plo-row">
-                    <label>Tahun Kurikulum</label>
-                    <select>
-                        <option>2024</option>
-                    </select>
-                </div>
-
-                <div class="add-plo-tabs">
-                    <button type="button" class="tab-new active" onclick="showAddNewPlo()">
-                        Add New
-                    </button>
-
-                    <button type="button" class="tab-select" onclick="showSelectPlo()">
-                        Select PLO
-                    </button>
-                </div>
-
-                <div id="addNewPloBox" class="add-plo-row textarea-row">
-                    <label>Nama PLO</label>
-                    <textarea>PLO 03</textarea>
-                </div>
-
-                <div id="selectPloBox" class="add-plo-row select-plo-row d-none">
-                    <label>PLO</label>
-
-                    <div class="plo-select-area">
-                        <div class="plo-search-box">
-                            <input type="text" id="ploSearchInput">
-                            <button type="button" onclick="togglePloList()">🔍</button>
+                <form method="POST" action="{{ route('clo.store') }}">
+                    @csrf
+                    <input type="hidden" name="id_mk" value="{{ $idMk }}">
+                    <div class="edit-modal-body">
+                        <div class="edit-field-group">
+                            <label>Nama CLO (maks 20 karakter)</label>
+                            <input type="text" name="nama_clo" required maxlength="20" placeholder="CLO1">
                         </div>
-
-                        <div id="ploDropdownList" class="plo-dropdown-list">
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 01] Mampu menganalisis permasalahan infokom yang kompleks, mendefinisikan, dan memodelkan kebutuhan dalam konteks enterprise atau masyarakat dengan menerapkan ilmu disiplin lain yang relevan')">
-                                [PLO 01] Mampu menganalisis permasalahan infokom yang kompleks, mendefinisikan, dan
-                                memodelkan kebutuhan dalam konteks enterprise atau masyarakat dengan menerapkan ilmu
-                                disiplin lain yang relevan
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 02] Mampu merancang, mengembangkan, mengimplementasikan, dan mengevaluasi solusi berbasis sistem informasi')">
-                                [PLO 02] Mampu merancang, mengembangkan, mengimplementasikan, dan mengevaluasi solusi
-                                berbasis sistem informasi
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 03] Mampu untuk bekerja secara kolaboratif, proaktif, dan bertanggungjawab dalam tim untuk mencapai tujuan bersama')">
-                                [PLO 03] Mampu untuk bekerja secara kolaboratif, proaktif, dan bertanggungjawab dalam tim
-                                untuk mencapai tujuan bersama
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 04] Mampu menerapkan pemikiran logis, kritis, sistematis, inovatif terhadap isu dan tanggung jawab profesional')">
-                                [PLO 04] Mampu menerapkan pemikiran logis, kritis, sistematis, inovatif terhadap isu dan
-                                tanggung jawab profesional
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 05] Mampu untuk bekerja secara kolaboratif, proaktif, dan bertanggungjawab dalam tim')">
-                                [PLO 05] Mampu untuk bekerja secara kolaboratif, proaktif, dan bertanggungjawab dalam tim
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 06] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi terhadap pembangunan berkelanjutan')">
-                                [PLO 06] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi terhadap
-                                pembangunan berkelanjutan
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 07] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi')">
-                                [PLO 07] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 08] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi')">
-                                [PLO 08] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 09] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi')">
-                                [PLO 09] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi
-                            </div>
-
-                            <div class="plo-option"
-                                onclick="selectPlo('[PLO 10] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi')">
-                                [PLO 10] Mampu menganalisis peran dan dampak dari sistem dan teknologi informasi
-                            </div>
+                        <div class="edit-field-group">
+                            <label>Deskripsi CLO</label>
+                            <textarea name="description_clo" required maxlength="1000" rows="3"
+                                style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;resize:vertical;"
+                                placeholder="Mahasiswa mampu..."></textarea>
                         </div>
                     </div>
-                </div>
-
+                    <div class="modal-footer-custom modal-footer-edit">
+                        <button type="button" class="btn-cancel" onclick="closeAddCloModal()">Cancel</button>
+                        <button type="submit" class="btn-save">Simpan</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="modal-footer-custom">
-                <button type="button" class="btn-cancel" onclick="closeAddPloModal()">Cancel</button>
-                <button type="button" class="btn-save">Save</button>
-            </div>
-
         </div>
-    </div>
 
-    <script>
-        function openAddPloModal() {
-            document.getElementById('addPloModal').classList.add('show');
-        }
-
-        function closeAddPloModal() {
-            document.getElementById('addPloModal').classList.remove('show');
-        }
-    </script>
-
-    <script>
-        function showSelectPlo() {
-            document.getElementById('selectPloBox').classList.remove('d-none');
-            document.getElementById('addNewPloBox').classList.add('d-none');
-
-            document.querySelector('.tab-select').classList.add('active');
-            document.querySelector('.tab-new').classList.remove('active');
-        }
-
-        function showAddNewPlo() {
-            document.getElementById('addNewPloBox').classList.remove('d-none');
-            document.getElementById('selectPloBox').classList.add('d-none');
-
-            document.querySelector('.tab-new').classList.add('active');
-            document.querySelector('.tab-select').classList.remove('active');
-        }
-    </script>
-
-    <script>
-        function togglePloList() {
-            document.getElementById('ploDropdownList').classList.toggle('show');
-        }
-
-        function selectPlo(value) {
-            document.getElementById('ploSearchInput').value = value;
-            document.getElementById('ploDropdownList').classList.remove('show');
-        }
-    </script>
-
-    <!-- add pop up edit di manage PLO -->
-    <div id="editPloModal" class="modal-overlay">
-        <div class="edit-plo-modal">
-
-            <div class="modal-header-custom">
-                <h3>Edit PLO</h3>
-                <button type="button" onclick="closeEditPloModal()">×</button>
+        {{-- MODAL EDIT CLO --}}
+        <div id="editCloModal" class="modal-overlay">
+            <div class="edit-mk-modal">
+                <div class="modal-header-custom edit-modal-header">
+                    <h3>Edit CLO</h3>
+                    <button type="button" onclick="closeEditCloModal()">×</button>
+                </div>
+                <form id="editCloForm" method="POST" action="">
+                    @csrf @method('PUT')
+                    <div class="edit-modal-body">
+                        <div class="edit-field-group">
+                            <label>Nama CLO</label>
+                            <input type="text" id="editNamaClo" name="nama_clo" required maxlength="20">
+                        </div>
+                        <div class="edit-field-group">
+                            <label>Deskripsi CLO</label>
+                            <textarea id="editDescClo" name="description_clo" required maxlength="1000" rows="3"
+                                style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer-custom modal-footer-edit">
+                        <button type="button" class="btn-cancel" onclick="closeEditCloModal()">Cancel</button>
+                        <button type="submit" class="btn-save">Simpan</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="edit-plo-body">
-
-                <div class="edit-plo-row">
-                    <label for="editFakultas">Fakultas</label>
-                    <select id="editFakultas" name="fakultas">
-                        <option value="Fakultas Rekayasa Industri">Fakultas Rekayasa Industri</option>
-                    </select>
-                </div>
-
-                <div class="edit-plo-row">
-                    <label for="editProdi">Program Studi</label>
-                    <select id="editProdi" name="program_studi">
-                        <option value="S1 Sistem Informasi">S1 Sistem Informasi</option>
-                    </select>
-                </div>
-
-                <div class="edit-plo-row">
-                    <label for="editKurikulum">Tahun Kurikulum</label>
-                    <select id="editKurikulum" name="tahun_kurikulum">
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                    </select>
-                </div>
-
-                <div class="edit-plo-row">
-                    <label for="editNomorPlo">Nomor PLO</label>
-                    <input type="text" id="editNomorPlo" name="nomor_plo" readonly>
-                </div>
-
-                <div class="edit-plo-row textarea-row">
-                    <label for="editDeskripsiPlo">Deskripsi PLO</label>
-                    <textarea id="editDeskripsiPlo" name="deskripsi_plo"></textarea>
-                </div>
-
-                <div class="edit-plo-row">
-                    <label for="editStatusMapping">Status Aktif PLO Mapping</label>
-                    <label class="switch">
-                        <input type="checkbox" id="editStatusMapping" name="status_mapping">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="edit-plo-row">
-                    <label for="editStatusPlo">Status Aktif PLO</label>
-                    <label class="switch">
-                        <input type="checkbox" id="editStatusPlo" name="status_plo">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-            </div>
-
-            <div class="modal-footer-custom">
-                <button type="button" class="btn-cancel" onclick="closeEditPloModal()">Cancel</button>
-                <button type="button" class="btn-save">Save</button>
-            </div>
-
         </div>
-    </div>
 
+        {{-- MODAL TAMBAH MAPPING CLO → PLO --}}
+        <div id="addMappingModal" class="modal-overlay">
+            <div class="edit-mk-modal">
+                <div class="modal-header-custom edit-modal-header">
+                    <h3>Tambah Mapping CLO → PLO</h3>
+                    <button type="button" onclick="closeAddMappingModal()">×</button>
+                </div>
+                <form method="POST" action="{{ route('plo-mapping.attach') }}">
+                    @csrf
+                    <input type="hidden" id="mappingCloId" name="id_clo" value="">
+                    <div class="edit-modal-body">
+                        <div class="edit-field-group">
+                            <label>CLO</label>
+                            <input type="text" id="mappingCloName" readonly style="background:#f5f5f5;">
+                        </div>
+                        <div class="edit-field-group">
+                            <label>PLO</label>
+                            <select name="id_plo" required>
+                                <option value="">-- Pilih PLO --</option>
+                                @foreach ($plosAll as $plo)
+                                    <option value="{{ $plo->id_plo }}">{{ $plo->nama_plo }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="edit-field-group">
+                            <label>Bobot (%)</label>
+                            <input type="number" name="percentage_weight" required min="0" max="100" step="0.01" value="100">
+                        </div>
+                    </div>
+                    <div class="modal-footer-custom modal-footer-edit">
+                        <button type="button" class="btn-cancel" onclick="closeAddMappingModal()">Cancel</button>
+                        <button type="submit" class="btn-save">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+@endsection
+
+@section('scripts')
     <script>
-        function openEditPloModal(button) {
-            const modal = document.getElementById('editPloModal');
+        function openAddCloModal()  { document.getElementById('addCloModal').classList.add('show'); }
+        function closeAddCloModal() { document.getElementById('addCloModal').classList.remove('show'); }
 
-            document.getElementById('editFakultas').value = button.dataset.fakultas || 'Fakultas Rekayasa Industri';
-            document.getElementById('editProdi').value = button.dataset.prodi || 'S1 Sistem Informasi';
-            document.getElementById('editKurikulum').value = button.dataset.kurikulum || '2024';
-            document.getElementById('editNomorPlo').value = button.dataset.nomor || '1';
-            document.getElementById('editDeskripsiPlo').value = button.dataset.deskripsi || '';
-            document.getElementById('editStatusMapping').checked = (button.dataset.statusMapping === 'Active');
-            document.getElementById('editStatusPlo').checked = (button.dataset.statusPlo === 'Active');
-
-            modal.classList.add('show');
+        function openEditCloModal(id, nama, desc) {
+            document.getElementById('editCloForm').action = '/clo/' + id;
+            document.getElementById('editNamaClo').value  = nama;
+            document.getElementById('editDescClo').value  = desc;
+            document.getElementById('editCloModal').classList.add('show');
         }
+        function closeEditCloModal() { document.getElementById('editCloModal').classList.remove('show'); }
 
-        function closeEditPloModal() {
-            document.getElementById('editPloModal').classList.remove('show');
+        function openAddMappingModal(cloId, cloName) {
+            document.getElementById('mappingCloId').value   = cloId;
+            document.getElementById('mappingCloName').value = cloName;
+            document.getElementById('addMappingModal').classList.add('show');
         }
+        function closeAddMappingModal() { document.getElementById('addMappingModal').classList.remove('show'); }
     </script>
 @endsection
