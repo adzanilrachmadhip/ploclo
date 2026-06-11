@@ -15,17 +15,16 @@
                     <img src="{{ asset('images/logo-telkom.png') }}" alt="Telkom University" class="login-logo">
                 </div>
 
-                <div class="circle circle-large"></div>
+                <div id="balls-canvas" class="balls-canvas"></div>
 
                 <div class="login-brand">
                     <h1>COMPASS</h1>
                     <h2>
-                        AUTOMATISASI PLO<br>
-                        SISTEM INFORMASI TELKOM UNIVERSITY SURABAYA
+                        Curriculum Outcomes Mapping,<br>
+                        Performances and ASsesment Systems
                     </h2>
                 </div>
 
-                <div class="circle circle-small"></div>
             </div>
 
             <div class="login-right">
@@ -71,4 +70,102 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+<script>
+(function () {
+    const canvas = document.getElementById('balls-canvas');
+
+    // Palette harmonis: purple → indigo → lavender → cornflower
+    // Semua masih dalam family ungu-biru, tidak saling nabrak
+    const palette = [
+        { color: 'rgba(153, 157, 247, 0.82)', size: 260 }, // periwinkle — besar
+        { color: 'rgba(196, 190, 255, 0.70)', size: 180 }, // lavender muda
+        { color: 'rgba(118, 124, 232, 0.76)', size: 135 }, // indigo medium
+        { color: 'rgba(185, 208, 255, 0.68)', size: 105 }, // cornflower
+        { color: 'rgba(213, 195, 255, 0.72)', size:  78 }, // lilac
+        { color: 'rgba(160, 196, 255, 0.65)', size:  58 }, // sky blue mini
+        { color: 'rgba(172, 158, 248, 0.78)', size:  95 }, // violet medium
+    ];
+
+    let W, H;
+    const balls = [];
+
+    function resize() {
+        W = canvas.offsetWidth;
+        H = canvas.offsetHeight;
+    }
+
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+
+    function initBalls() {
+        canvas.innerHTML = '';
+        balls.length = 0;
+        resize();
+
+        palette.forEach(({ color, size }) => {
+            const el = document.createElement('div');
+            el.className = 'ball';
+            el.style.cssText = [
+                'width:'  + size + 'px',
+                'height:' + size + 'px',
+                'background:' + color,
+                // blur tipis di bola besar untuk efek depth
+                size > 150 ? 'filter:blur(1px)' : '',
+            ].filter(Boolean).join(';');
+
+            const x = rand(0, Math.max(10, W - size));
+            const y = rand(0, Math.max(10, H - size));
+
+            // Bola kecil sedikit lebih cepat → terasa hidup
+            const baseSpeed = rand(0.30, 0.65);
+            const sizeFactor = 1 + (260 - size) / 400;
+            const speed = baseSpeed * sizeFactor;
+            const angle = rand(0, Math.PI * 2);
+
+            balls.push({
+                el, size,
+                x, y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+            });
+
+            canvas.appendChild(el);
+            el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+        });
+    }
+
+    function animate() {
+        const len = balls.length;
+        for (let i = 0; i < len; i++) {
+            const b = balls[i];
+            b.x += b.vx;
+            b.y += b.vy;
+
+            if (b.x <= 0)          { b.x = 0;          b.vx =  Math.abs(b.vx); }
+            if (b.x >= W - b.size) { b.x = W - b.size; b.vx = -Math.abs(b.vx); }
+            if (b.y <= 0)          { b.y = 0;          b.vy =  Math.abs(b.vy); }
+            if (b.y >= H - b.size) { b.y = H - b.size; b.vy = -Math.abs(b.vy); }
+
+            b.el.style.transform = 'translate3d(' + b.x + 'px,' + b.y + 'px,0)';
+        }
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', function () {
+        resize();
+        balls.forEach(function (b) {
+            b.x = Math.min(b.x, Math.max(0, W - b.size));
+            b.y = Math.min(b.y, Math.max(0, H - b.size));
+        });
+    });
+
+    if (document.readyState === 'complete') {
+        initBalls(); animate();
+    } else {
+        window.addEventListener('load', function () { initBalls(); animate(); });
+    }
+})();
+</script>
 @endsection

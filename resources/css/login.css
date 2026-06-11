@@ -231,36 +231,29 @@ body {
     justify-content: center;
 }
 
-.circle {
-    display: block;
+.balls-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
 }
 
-.circle-large,
-.login-circle-large {
-    width: 270px;
-    height: 270px;
-    left: 70px;
-    top: 170px;
-    background: #999DF7;
-    border-radius: 50%;
+.ball {
     position: absolute;
-    z-index: 1;
-}
-
-.circle-small,
-.login-circle-small {
-    width: 125px;
-    height: 125px;
-    right: 260px;
-    bottom: 110px;
-    background: #999DF7;
     border-radius: 50%;
-    position: absolute;
-    z-index: 1;
+    pointer-events: none;
+    will-change: transform;
+    transition: none;
 }
 
 .login-brand {
+    position: relative;
     z-index: 2;
+}
+
+.login-left {
+    overflow: hidden;
 }
 
 FIX FULLSCREEN LOGIN
