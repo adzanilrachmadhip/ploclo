@@ -16,7 +16,7 @@ class NilaiController extends Controller
 {
     public function index(Request $request, PloCalculationService $service)
     {
-        $user  = auth()->user();
+        $user = auth()->user();
         $query = Mahasiswa::query();
 
         // Dosen wali hanya bisa lihat mahasiswa bimbingannya sendiri
@@ -28,13 +28,13 @@ class NilaiController extends Controller
         }
 
         $query->when($request->filled('angkatan'), fn($q) => $q->where('tahun_masuk', $request->angkatan))
-              ->when($request->filled('status'),   fn($q) => $q->where('status', $request->status));
+            ->when($request->filled('status'), fn($q) => $q->where('status', $request->status));
 
         $mahasiswas = $query->orderBy('nama')->get();
-        $plos       = Plo::orderBy('id_plo')->get();
+        $plos = Plo::orderBy('id_plo')->get();
 
         $rows = $mahasiswas->map(function ($mahasiswa) use ($service, $plos) {
-            $result     = $service->calculate($mahasiswa->id_mahasiswa);
+            $result = $service->calculate($mahasiswa->id_mahasiswa);
             $ploResults = collect($result['plo_results']);
 
             return [
@@ -48,7 +48,7 @@ class NilaiController extends Controller
 
         // Data untuk dropdown filter
         $angkatanList = Mahasiswa::select('tahun_masuk')->distinct()->orderBy('tahun_masuk', 'desc')->pluck('tahun_masuk');
-        $dosenList    = User::where('role', 'dosen wali')->whereNotNull('kode_dosen')->orderBy('kode_dosen')->get(['kode_dosen', 'nama_lengkap']);
+        $dosenList = User::where('role', 'dosen wali')->whereNotNull('kode_dosen')->orderBy('kode_dosen')->get(['kode_dosen', 'nama_lengkap']);
 
         return view('nilai.index_nw', compact('rows', 'plos', 'angkatanList', 'dosenList'));
     }
@@ -56,8 +56,8 @@ class NilaiController extends Controller
     public function inputForm(Request $request)
     {
         $matkuls = MataKuliah::orderBy('kode_mk')->get();
-        $idAt    = $request->id_at;
-        $idMk    = $request->id_mk;
+        $idAt = $request->id_at;
+        $idMk = $request->id_mk;
 
         $selectedAt = null;
         $mahasiswas = collect();
@@ -73,12 +73,22 @@ class NilaiController extends Controller
 
         if ($idAt) {
             $selectedAt = AssessmentTool::with('clo.mataKuliah')->findOrFail($idAt);
-            $mahasiswas = Mahasiswa::orderBy('nama')->get();
+            $user = auth()->user();
+            $mahasiswaQuery = Mahasiswa::query();
 
+            if ($user && $user->isDosenWali()) {
+                $kodeDosen = strtoupper($user->kode_dosen ?? $user->username ?? '');
+
+                $mahasiswaQuery->whereRaw('UPPER(kode_dosen) = ?', [$kodeDosen]);
+            }
+
+            $mahasiswas = $mahasiswaQuery
+                ->orderBy('class_code')
+                ->orderBy('nama')
+                ->get();
             $existingScores = NilaiMahasiswa::where('id_at', $idAt)
                 ->pluck('score', 'id_mahasiswa')
                 ->toArray();
-
             $idMk = $selectedAt->clo?->id_mk;
             $cloAtList = Clo::with('assessmentTools')
                 ->where('id_mk', $idMk)
@@ -87,28 +97,44 @@ class NilaiController extends Controller
         }
 
         return view('nilai.input_nw', compact(
-            'matkuls', 'cloAtList', 'selectedAt',
-            'mahasiswas', 'existingScores', 'idMk', 'idAt'
+            'matkuls',
+            'cloAtList',
+            'selectedAt',
+            'mahasiswas',
+            'existingScores',
+            'idMk',
+            'idAt'
         ));
     }
 
     public function storeOrUpdate(Request $request)
     {
         $request->validate([
-            'id_at'    => 'required|exists:assessment_tools,id_at',
-            'scores'   => 'required|array',
+            'id_at' => 'required|exists:assessment_tools,id_at',
+            'scores' => 'required|array',
             'scores.*' => 'nullable|numeric|min:0|max:100',
         ]);
 
         $idAt = $request->id_at;
+        $user = auth()->user();
+        $allowedMahasiswaIds = null;
+        if ($user && $user->isDosenWali()) {
+            $kodeDosen = strtoupper($user->kode_dosen ?? $user->username ?? '');
+            $allowedMahasiswaIds = Mahasiswa::whereRaw('UPPER(kode_dosen) = ?', [$kodeDosen])
+                ->pluck('id_mahasiswa')
+                ->map(fn($id) => (int) $id)
+                ->toArray();
+        }
 
         foreach ($request->scores as $idMahasiswa => $score) {
-            if ($score === null || $score === '') continue;
-
+            if ($score === null || $score === '') {
+                continue;
+            }
+            if ($allowedMahasiswaIds !== null && !in_array((int) $idMahasiswa, $allowedMahasiswaIds, true)) {
+                abort(403, 'Anda tidak memiliki akses untuk menginput nilai mahasiswa ini.');}
             NilaiMahasiswa::updateOrCreate(
                 ['id_mahasiswa' => $idMahasiswa, 'id_at' => $idAt],
-                ['score' => $score]
-            );
+                ['score' => $score]);
         }
 
         return back()->with('success', 'Nilai berhasil disimpan.');
@@ -122,7 +148,7 @@ class NilaiController extends Controller
         $result = $service->calculate($idMahasiswa);
 
         $cloResults = collect($result['clo_results'])
-            ->filter(fn ($clo) => $clo['id_plo'] == $idPlo)
+            ->filter(fn($clo) => $clo['id_plo'] == $idPlo)
             ->values();
 
         return view('nilai.show_nw', compact('mahasiswa', 'plo', 'cloResults'));

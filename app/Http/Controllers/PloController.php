@@ -59,7 +59,7 @@ class PloController extends Controller
         if ($idMk) {
             $selectedMk = MataKuliah::find($idMk);
             if ($selectedMk) {
-                $cloList = Clo::with(['plos' => fn($q) => $q->withPivot('percentage_weight')])
+                $cloList = Clo::with('plos')
                     ->where('id_mk', $idMk)
                     ->orderBy('nama_clo')
                     ->get();
@@ -75,7 +75,6 @@ class PloController extends Controller
         $validated = $request->validate([
             'id_clo'            => 'required|exists:data_clo,id_clo',
             'id_plo'            => 'required|exists:data_plo,id_plo',
-            'percentage_weight' => 'required|numeric|min:0|max:100',
         ]);
 
         // Prevent duplicate
@@ -91,7 +90,6 @@ class PloController extends Controller
         DB::table('pivot_clo_plo')->insert([
             'id_clo'            => $validated['id_clo'],
             'id_plo'            => $validated['id_plo'],
-            'percentage_weight' => $validated['percentage_weight'],
             'created_at'        => now(),
             'updated_at'        => now(),
         ]);

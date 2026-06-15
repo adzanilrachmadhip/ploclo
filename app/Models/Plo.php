@@ -21,6 +21,6 @@ class Plo extends Model
             'pivot_clo_plo',
             'id_plo',
             'id_clo'
-        )->withPivot('percentage_weight');
+        )->withPivot('id_pivot');
     }
 }

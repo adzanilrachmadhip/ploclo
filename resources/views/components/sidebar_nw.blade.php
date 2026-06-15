@@ -1,86 +1,123 @@
 <aside class="dashboard-sidebar">
     @php
-        $menuIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none"><path d="M10.1377 0C10.6066 1.68174e-05 11.0504 0.145636 11.3867 0.40918L19.6221 6.86621C19.9942 7.15804 20.2754 7.73664 20.2754 8.21191V9.08789C20.2754 9.6495 19.822 10.1064 19.2646 10.1064H17.8525C17.6908 10.1064 17.5586 10.2395 17.5586 10.4023V16.4482C17.5584 17.855 16.4231 18.9997 15.0273 19H12.2783V14.376C12.2783 12.9999 11.6627 11.8809 10.1377 11.8809C8.61266 11.8809 7.99707 12.9999 7.99707 14.376V19H5.24805C3.85238 19 2.71702 17.8551 2.7168 16.4482V10.4023C2.71677 10.2395 2.58459 10.1064 2.42285 10.1064H1.01074C0.453399 10.1064 0 9.64974 0 9.08789V8.21191C3.11853e-05 7.73661 0.281178 7.15802 0.65332 6.86621L8.88867 0.40918C9.2252 0.145671 9.66836 0 10.1377 0Z" fill="white"/></svg>';
+        $user = auth()->user();
+
+        $menuIcon =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none"><path d="M10.1377 0C10.6066 1.68174e-05 11.0504 0.145636 11.3867 0.40918L19.6221 6.86621C19.9942 7.15804 20.2754 7.73664 20.2754 8.21191V9.08789C20.2754 9.6495 19.822 10.1064 19.2646 10.1064H17.8525C17.6908 10.1064 17.5586 10.2395 17.5586 10.4023V16.4482C17.5584 17.855 16.4231 18.9997 15.0273 19H12.2783V14.376C12.2783 12.9999 11.6627 11.8809 10.1377 11.8809C8.61266 11.8809 7.99707 12.9999 7.99707 14.376V19H5.24805C3.85238 19 2.71702 17.8551 2.7168 16.4482V10.4023C2.71677 10.2395 2.58459 10.1064 2.42285 10.1064H1.01074C0.453399 10.1064 0 9.64974 0 9.08789V8.21191C3.11853e-05 7.73661 0.281178 7.15802 0.65332 6.86621L8.88867 0.40918C9.2252 0.145671 9.66836 0 10.1377 0Z" fill="white"/></svg>';
+
+        $isAdmin = $user?->isAdmin();
+        $isKaprodi = $user?->isKaprodi();
+        $isDosenWali = $user?->isDosenWali();
+
+        if ($isAdmin) {
+            $dashboardRoute = 'admin.dashboard';
+        } elseif ($isKaprodi) {
+            $dashboardRoute = 'kaprodi.dashboard';
+        } elseif ($isDosenWali) {
+            $dashboardRoute = 'dosenwali.dashboard';
+        } else {
+            $dashboardRoute = 'dashboard';
+        }
+
+        $dashboardActive =
+            request()->routeIs('dashboard') ||
+            request()->routeIs('admin.dashboard') ||
+            request()->routeIs('kaprodi.dashboard') ||
+            request()->routeIs('dosenwali.dashboard');
+
+        $nilaiOpen = request()->routeIs('nilai.*');
+        $mataKuliahOpen = request()->routeIs('mata-kuliah.*');
+        $kurikulumOpen = request()->routeIs('plo.*') || request()->routeIs('assessment-tools.*');
     @endphp
 
     <div class="sidebar-logo">COMPASS</div>
 
     <div class="sidebar-profile mb-4">
         <div class="profile-circle"></div>
-        <p class="profile-name">{{ auth()->user()?->nama_lengkap ?? auth()->user()?->name ?? 'User' }}</p>
+        <p class="profile-name">
+            {{ $user?->nama_lengkap ?? ($user?->name ?? 'User') }}
+        </p>
         <p class="profile-id">Sistem Informasi</p>
     </div>
 
     <div class="menu-title">MENU</div>
 
-    <a href="{{ route('dashboard') }}" class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+    <a href="{{ route($dashboardRoute) }}" class="menu-link {{ $dashboardActive ? 'active' : '' }}">
         {!! $menuIcon !!}
         <span>Dashboard</span>
     </a>
 
-    @php $nilaiOpen = request()->routeIs('nilai.*'); @endphp
     <a href="#" class="menu-link menu-toggle {{ $nilaiOpen ? 'active' : '' }}"
-       onclick="toggleSubmenu(event, 'submenu-nilai')">
+        onclick="toggleSubmenu(event, 'submenu-nilai')">
         {!! $menuIcon !!}
         <span>Nilai</span>
     </a>
+
     <div id="submenu-nilai" class="submenu {{ $nilaiOpen ? 'show' : '' }}">
         <a href="{{ route('nilai.index') }}"
-           class="submenu-link {{ request()->routeIs('nilai.index') ? 'active' : '' }}">
+            class="submenu-link {{ request()->routeIs('nilai.index') || request()->routeIs('nilai.show') ? 'active' : '' }}">
             Lihat Nilai
         </a>
-        <a href="{{ route('nilai.input') }}"
-           class="submenu-link {{ request()->routeIs('nilai.input') ? 'active' : '' }}">
-            Input Nilai
-        </a>
+
+        @if ($isDosenWali)
+            <a href="{{ route('nilai.input') }}"
+                class="submenu-link {{ request()->routeIs('nilai.input') ? 'active' : '' }}">
+                Input Nilai
+            </a>
+        @endif
     </div>
 
-    @php $mataKuliahOpen = request()->routeIs('mata-kuliah.*'); @endphp
     <a href="#" class="menu-link menu-toggle {{ $mataKuliahOpen ? 'active' : '' }}"
-       onclick="toggleSubmenu(event, 'submenu-mata-kuliah')">
+        onclick="toggleSubmenu(event, 'submenu-mata-kuliah')">
         {!! $menuIcon !!}
         <span>Mata Kuliah</span>
     </a>
 
     <div id="submenu-mata-kuliah" class="submenu {{ $mataKuliahOpen ? 'show' : '' }}">
         <a href="{{ route('mata-kuliah.lihat.ui') }}"
-           class="submenu-link {{ request()->routeIs('mata-kuliah.lihat.ui') ? 'active' : '' }}">
+            class="submenu-link {{ request()->routeIs('mata-kuliah.lihat.ui') ? 'active' : '' }}">
             Lihat Mata Kuliah
         </a>
-        <a href="{{ route('mata-kuliah.index') }}"
-           class="submenu-link {{ request()->routeIs('mata-kuliah.index') ? 'active' : '' }}">
-            Kelola Mata Kuliah
-        </a>
+
+        @if ($isAdmin || $isKaprodi)
+            <a href="{{ route('mata-kuliah.index') }}"
+                class="submenu-link {{ request()->routeIs('mata-kuliah.index') ? 'active' : '' }}">
+                Kelola Mata Kuliah
+            </a>
+        @endif
     </div>
 
-    <a href="{{ route('mahasiswa.index') }}" class="menu-link {{ request()->routeIs('mahasiswa.*') ? 'active' : '' }}">
+    <a href="{{ route('mahasiswa.index') }}"
+        class="menu-link {{ request()->routeIs('mahasiswa.*') ? 'active' : '' }}">
         {!! $menuIcon !!}
         <span>Mahasiswa</span>
     </a>
 
-    @if (auth()->user()->isAdmin() || auth()->user()->isKaprodi())
-    <a href="{{ route('users.index') }}" class="menu-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
-        {!! $menuIcon !!}
-        <span>Manajemen User</span>
-    </a>
+    @if ($isAdmin)
+        <a href="{{ route('users.index') }}" class="menu-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+            {!! $menuIcon !!}
+            <span>Manajemen User</span>
+        </a>
     @endif
 
-    @php $kurikulumOpen = request()->routeIs('plo.*') || request()->routeIs('assessment-tools.*'); @endphp
-    <a href="#" class="menu-link menu-toggle {{ $kurikulumOpen ? 'active' : '' }}"
-       onclick="toggleSubmenu(event, 'submenu-kurikulum')">
-        {!! $menuIcon !!}
-        <span>Kurikulum</span>
-    </a>
-    <div id="submenu-kurikulum" class="submenu {{ $kurikulumOpen ? 'show' : '' }}">
-        <a href="{{ route('plo.index') }}"
-           class="submenu-link {{ request()->routeIs('plo.*') ? 'active' : '' }}">
-            Kelola PLO
+    @if ($isAdmin || $isKaprodi)
+        <a href="#" class="menu-link menu-toggle {{ $kurikulumOpen ? 'active' : '' }}"
+            onclick="toggleSubmenu(event, 'submenu-kurikulum')">
+            {!! $menuIcon !!}
+            <span>Kurikulum</span>
         </a>
-        <a href="{{ route('assessment-tools.index') }}"
-           class="submenu-link {{ request()->routeIs('assessment-tools.*') ? 'active' : '' }}">
-            Assessment Tools
-        </a>
-    </div>
+
+        <div id="submenu-kurikulum" class="submenu {{ $kurikulumOpen ? 'show' : '' }}">
+            <a href="{{ route('plo.index') }}" class="submenu-link {{ request()->routeIs('plo.*') ? 'active' : '' }}">
+                Kelola PLO
+            </a>
+
+            <a href="{{ route('assessment-tools.index') }}"
+                class="submenu-link {{ request()->routeIs('assessment-tools.*') ? 'active' : '' }}">
+                Assessment Tools
+            </a>
+        </div>
+    @endif
 
     <a href="{{ route('rps.index') }}" class="menu-link {{ request()->routeIs('rps.*') ? 'active' : '' }}">
         {!! $menuIcon !!}
@@ -99,6 +136,11 @@
     function toggleSubmenu(event, id) {
         event.preventDefault();
         event.stopPropagation();
-        document.getElementById(id)?.classList.toggle('show');
+
+        const submenu = document.getElementById(id);
+
+        if (submenu) {
+            submenu.classList.toggle('show');
+        }
     }
 </script>

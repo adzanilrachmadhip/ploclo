@@ -5,6 +5,7 @@
 
 @section('styles')
     @vite('resources/css/mata_kuliah.css')
+    @vite('resources/css/compass_nw.css')
 @endsection
 
 @section('content')
@@ -17,11 +18,6 @@
         @if (session('error'))
             <div class="mk-alert-success" style="display:block;background:#f8d7da;color:#721c24;border-color:#f5c6cb;">{{ session('error') }}</div>
         @endif
-
-        <div style="margin-bottom:12px;">
-            <button type="button" class="mk-apply-btn" onclick="openAddPloModal()">+ Tambah PLO</button>
-        </div>
-
         <div class="mk-table-wrap">
             <table class="mk-table">
                 <thead>
@@ -61,6 +57,11 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="plo-add-bottom-wrap">
+            <button type="button" class="btn-tambah-plo-bawah" onclick="openAddPloModal()">
+                Tambah PLO
+            </button>
         </div>
 
         {{-- MODAL TAMBAH PLO --}}

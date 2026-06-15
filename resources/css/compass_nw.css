@@ -1,6 +1,4 @@
-/* =========================
-   GLOBAL APP LAYOUT
-========================= */
+/*GLOBAL APP LAYOUT*/
 
 html,
 body {
@@ -37,9 +35,7 @@ body {
     box-sizing: border-box;
 }
 
-/* =========================
-   SIDEBAR GLOBAL
-========================= */
+/* SIDEBAR */
 
 .dashboard-sidebar {
     width: 221px;
@@ -161,9 +157,7 @@ body {
     opacity: 0.8;
 }
 
-/* =========================
-   HEADER GLOBAL
-========================= */
+/* HEADER */
 
 .dashboard-header {
     width: 100%;
@@ -238,9 +232,7 @@ body {
     font-size: 20px;
 }
 
-/* =========================
-   MOBILE OVERLAY
-========================= */
+/*  MOBILE OVERLAY*/
 
 .sidebar-overlay {
     display: none;
@@ -255,9 +247,7 @@ body {
     cursor: pointer;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/*RESPONSIVE*/
 
 @media (max-width: 768px) {
     .dashboard-sidebar {
@@ -297,3 +287,202 @@ body {
         width: 120px;
     }
 }
+
+/* PAGE DATA MAHASISWA FIX*/
+
+.mahasiswa-page .mk-filter {
+    width: 520px;
+    margin-bottom: 24px;
+}
+
+.mahasiswa-page .filter-row {
+    display: grid;
+    grid-template-columns: 150px 320px;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.mahasiswa-page .filter-row label {
+    margin: 0;
+    font-size: 14px;
+    color: #222222;
+}
+
+.mahasiswa-page .filter-row select,
+.mahasiswa-page .filter-row input {
+    width: 320px !important;
+    max-width: 320px !important;
+    height: 32px;
+    box-sizing: border-box;
+    border: 1px solid #B5B5B5;
+    border-radius: 5px;
+    padding: 0 12px;
+    font-size: 13px;
+}
+
+.mahasiswa-page .filter-row select {
+    background: #D9D9D9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .18);
+}
+
+.mahasiswa-page .filter-row input {
+    background: #FFFFFF;
+    box-shadow: none;
+}
+
+.mahasiswa-page select[name="kode_dosen"] {
+    width: 320px !important;
+    max-width: 320px !important;
+}
+
+.mahasiswa-page .mk-apply-btn {
+    min-width: 76px;
+    height: 34px;
+}
+
+.mahasiswa-count-action-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 18px 0 12px;
+}
+
+.mahasiswa-count-text {
+    font-size: 14px;
+    color: #666666;
+}
+
+/* tambah mahasiswa */
+.btn-tambah-mahasiswa {
+    min-width: 155px;
+    height: 38px;
+    padding: 0 16px;
+    border: 1px solid #B8A1E8;
+    border-radius: 6px;
+    background: #D8C2FF;
+    color: #000000;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.btn-tambah-mahasiswa:hover {
+    background: #CDB1FF;
+}
+
+/* Table full width */
+.mahasiswa-page .mk-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.mahasiswa-page .mk-table {
+    width: 100%;
+    min-width: 1080px;
+}
+
+@media (max-width: 768px) {
+    .mahasiswa-page .mk-filter {
+        width: 100%;
+    }
+
+    .mahasiswa-page .filter-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .mahasiswa-page .filter-row select,
+    .mahasiswa-page .filter-row input,
+    .mahasiswa-page select[name="kode_dosen"] {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .mahasiswa-count-action-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Page kelola PLO*/
+
+.plo-page .mk-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.plo-page .plo-table {
+    width: 100%;
+    min-width: 1080px;
+}
+
+.plo-add-bottom-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+    padding-right: 0;
+}
+
+.btn-tambah-plo-bawah {
+    min-width: 140px;
+    height: 40px;
+    padding: 0 20px;
+    border: 1px solid #B8A1E8;
+    border-radius: 6px;
+    background: #D8C2FF;
+    color: #222222;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.btn-tambah-plo-bawah:hover {
+    background: #CDB1FF;
+}
+
+/*button lihat rps */
+.btn-detail {
+    min-width: 78px;
+    height: 32px;
+    padding: 6px 12px;
+    border: 1px solid #B8A1E8;
+    border-radius: 5px;
+    background: #D8C2FF;
+    background-color: #D8C2FF;
+    color: #222222;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    box-shadow: none;
+}
+
+.rps-page .btn-detail:hover {
+    background: #CDB1FF;
+    background-color: #CDB1FF;
+    box-shadow: none;
+}
+
+.rps-page .btn-detail:active {
+    transform: none;
+    box-shadow: none;
+}
+

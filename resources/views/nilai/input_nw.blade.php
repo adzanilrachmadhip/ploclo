@@ -12,12 +12,13 @@
         <div class="nilai-title">Input Nilai Mahasiswa</div>
 
         @if (session('success'))
-            <div style="background:#d4edda;color:#155724;padding:10px 16px;border-radius:6px;margin-bottom:16px;border:1px solid #c3e6cb;">
+            <div
+                style="background:#d4edda;color:#155724;padding:10px 16px;border-radius:6px;margin-bottom:16px;border:1px solid #c3e6cb;">
                 {{ session('success') }}
             </div>
         @endif
 
-        {{-- Step 1: Pilih Mata Kuliah --}}
+        {{-- Pilih Mata Kuliah --}}
         <form method="GET" action="{{ route('nilai.input') }}" class="filter-section">
             <div class="filter-item">
                 <label>Mata Kuliah</label>
@@ -32,7 +33,7 @@
             </div>
         </form>
 
-        {{-- Step 2: Pilih Assessment Tool --}}
+        {{-- Pilih Assessment Tool --}}
         @if ($idMk && $cloAtList->count() > 0)
             <div class="table-card" style="margin-bottom:16px;">
                 <p style="font-weight:600;margin-bottom:8px;">Pilih Assessment Tool:</p>
@@ -57,7 +58,6 @@
             <div class="info-box">Belum ada CLO/AT untuk mata kuliah ini.</div>
         @endif
 
-        {{-- Step 3: Input Nilai --}}
         @if ($selectedAt && $mahasiswas->count() > 0)
             <div class="table-card">
                 <h3 style="margin-bottom:4px;">
@@ -68,7 +68,7 @@
                     Bobot dalam CLO: {{ $selectedAt->weight_in_clo }}%
                 </p>
 
-                <form method="POST" action="{{ route('nilai.store') }}">
+                <form id="formInputNilai" method="POST" action="{{ route('nilai.store') }}">
                     @csrf
                     <input type="hidden" name="id_at" value="{{ $selectedAt->id_at }}">
 
@@ -91,10 +91,9 @@
                                         <td>{{ $mhs->nama }}</td>
                                         <td>{{ $mhs->kode_dosen ?? '-' }}</td>
                                         <td>
-                                            <input type="number"
-                                                name="scores[{{ $mhs->id_mahasiswa }}]"
-                                                value="{{ $existingScores[$mhs->id_mahasiswa] ?? '' }}"
-                                                min="0" max="100" step="0.01"
+                                            <input type="number" name="scores[{{ $mhs->id_mahasiswa }}]"
+                                                value="{{ $existingScores[$mhs->id_mahasiswa] ?? '' }}" min="0"
+                                                max="100" step="0.01"
                                                 style="width:90px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;text-align:center;"
                                                 placeholder="–">
                                         </td>
@@ -104,9 +103,10 @@
                         </table>
                     </div>
 
-                    <div style="margin-top:16px;display:flex;gap:10px;align-items:center;">
-                        <button type="submit" class="apply-btn">Simpan Semua Nilai</button>
-                        <a href="{{ route('nilai.input', ['id_mk' => $idMk]) }}" style="color:#666;font-size:0.9em;">Pilih AT lain</a>
+                    <div class="input-nilai-actions">
+                        <button type="submit" class="btn-simpan-nilai">
+                            Simpan Nilai
+                        </button>
                     </div>
                 </form>
             </div>
@@ -114,4 +114,66 @@
             <div class="info-box">Belum ada data mahasiswa.</div>
         @endif
     </main>
+
+
+@endsection
+
+@section('scripts')
+    <script>
+        let nilaiChanged = false;
+        let isSubmitting = false;
+
+        const formInputNilai = document.getElementById('formInputNilai');
+
+        if (formInputNilai) {
+            const nilaiInputs = formInputNilai.querySelectorAll('input, select, textarea');
+
+            nilaiInputs.forEach(function(input) {
+                input.addEventListener('change', function() {
+                    nilaiChanged = true;
+                });
+
+                input.addEventListener('input', function() {
+                    nilaiChanged = true;
+                });
+            });
+
+            formInputNilai.addEventListener('submit', function() {
+                isSubmitting = true;
+                nilaiChanged = false;
+            });
+        }
+
+        window.addEventListener('beforeunload', function(event) {
+            if (nilaiChanged && !isSubmitting) {
+                event.preventDefault();
+                event.returnValue = '';
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            const target = event.target.closest('a, button');
+
+            if (!target) {
+                return;
+            }
+
+            if (target.type === 'submit') {
+                return;
+            }
+
+            if (nilaiChanged && !isSubmitting) {
+                const confirmLeave = confirm(
+                    'Jika Anda beralih, perubahan tidak akan disimpan. Mau simpan nilai dulu?'
+                );
+
+                if (confirmLeave) {
+                    event.preventDefault();
+                    formInputNilai?.requestSubmit();
+                } else {
+                    nilaiChanged = false;
+                }
+            }
+        });
+    </script>
 @endsection

@@ -13,6 +13,8 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\Auth\JwtAuthController;
 use App\Http\Middleware\JwtMiddleware;
 use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\DosenWaliDashboardController;
 
 // Autentikasi
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login.form');
@@ -21,8 +23,31 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Protected web routes
 Route::middleware('auth')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/', function () {
+        return redirect()->route('dashboard');
+    })->name('home');
+
+    Route::get('/dashboard', function () {
+        $user = auth()->user();
+
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->isKaprodi()) {
+            return redirect()->route('kaprodi.dashboard');
+        }
+
+        if ($user->isDosenWali()) {
+            return redirect()->route('dosenwali.dashboard');
+        }
+
+        abort(403);
+    })->name('dashboard');
+
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/kaprodi/dashboard', [HomeController::class, 'index'])->name('kaprodi.dashboard');
+    Route::get('/dosenwali/dashboard', [DosenWaliDashboardController::class, 'index'])->name('dosenwali.dashboard');
 
     Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
     Route::get('/nilai/input', [NilaiController::class, 'inputForm'])->name('nilai.input');
@@ -65,9 +90,29 @@ Route::middleware('auth')->group(function () {
     Route::put('/mahasiswa/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
     Route::delete('/mahasiswa/{id}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
 
-    Route::get('/rps', function () {
-        return view('rps.index_nw');
-    })->name('rps.index');
+    Route::get('/rps', function (\Illuminate\Http\Request $request) {
+        $query = \App\Models\MataKuliah::query();
+        if ($request->filled('tahun_kurikulum')) {
+            $query->where('tahun_kurikulum', $request->tahun_kurikulum);}
+        if ($request->filled('semester')) {
+            $query->where('semester', $request->semester);}
+
+        $rpsList = $query
+            ->orderBy('semester')
+            ->orderBy('kode_mk')
+            ->get();
+
+        $tahunList = \App\Models\MataKuliah::select('tahun_kurikulum')
+            ->distinct()
+            ->orderBy('tahun_kurikulum', 'desc')
+            ->pluck('tahun_kurikulum');
+
+        $semesterList = \App\Models\MataKuliah::select('semester')
+            ->distinct()
+            ->orderBy('semester')
+            ->pluck('semester');
+
+        return view('rps.index_nw', compact('rpsList', 'tahunList', 'semesterList'));})->name('rps.index');
 });
 
 // JWT API routes

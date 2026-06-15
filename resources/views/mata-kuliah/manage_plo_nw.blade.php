@@ -39,11 +39,6 @@
                 | SKS: {{ $selectedMk->sks }} | Semester: {{ $selectedMk->semester }}
             </div>
 
-            {{-- Tambah CLO --}}
-            <div style="margin-bottom:12px;">
-                <button type="button" class="mk-apply-btn" onclick="openAddCloModal()">+ Tambah CLO</button>
-            </div>
-
             {{-- Tabel CLO + Mapping PLO --}}
             <div class="mk-table-wrap">
                 <table class="mk-table">
@@ -63,7 +58,7 @@
                                 <td>
                                     @foreach ($clo->plos as $plo)
                                         <span style="display:inline-block;margin:2px 4px 2px 0;padding:2px 8px;background:#e8f0fe;border-radius:12px;font-size:0.82em;">
-                                            {{ $plo->nama_plo }} ({{ $plo->pivot->percentage_weight }}%)
+                                            {{ $plo->nama_plo }}
                                             <form method="POST" action="{{ route('plo-mapping.detach', $plo->pivot->id_pivot) }}"
                                                 style="display:inline;"
                                                 onsubmit="return confirm('Hapus mapping {{ $clo->nama_clo }} → {{ $plo->nama_plo }}?')">
@@ -98,6 +93,10 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+            {{-- Tambah CLO --}}
+            <div style="margin-top:12px;">
+                <button type="button" class="mk-apply-btn" onclick="openAddCloModal()"> Tambah CLO</button>
             </div>
         @else
             <div class="mk-info-box">Pilih mata kuliah untuk melihat dan mengelola CLO & mapping PLO.</div>
@@ -185,9 +184,11 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="edit-field-group">
-                            <label>Bobot (%)</label>
-                            <input type="number" name="percentage_weight" required min="0" max="100" step="0.01" value="100">
+                         <div class="edit-field-group">
+                            <div style="background:#fffbe6;border-radius:6px;padding:10px;font-size:12px;color:#555;">
+                                Bobot penilaian tidak diatur pada mapping CLO-PLO.
+                                Bobot 100% mata kuliah dihitung dari Assessment Tools.
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer-custom modal-footer-edit">

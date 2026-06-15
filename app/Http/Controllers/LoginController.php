@@ -19,14 +19,30 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
-            $request->session()->regenerate();
+        if (Auth::attempt($validated)) {
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+        $role = strtolower(trim($user->role));
+
+        if ($role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($role === 'kaprodi') {
             return redirect()->route('dashboard');
         }
 
+        // if (in_array($role, ['dosen wali', 'dosen_wali', 'dosenwali', 'dosen-wali'])) {
+        //     return redirect()->route('dashboard');
+        // }
+
+        return redirect()->route('dashboard');
+    }
+
         return back()
             ->withInput($request->only('username'))
-            ->with('error', 'Username atau password salah');
+            ->with('error', 'User and Password Not Match');
     }
 
     public function logout(Request $request)

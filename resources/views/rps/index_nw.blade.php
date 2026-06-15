@@ -11,25 +11,35 @@
     <section class="mk-wrapper">
         <div class="mk-title">Rencana Pembelajaran Semester (RPS)</div>
 
-        <div class="mk-filter">
+        <form method="GET" action="{{ route('rps.index') }}" class="mk-filter">
             <div class="filter-row">
                 <label>Tahun Kurikulum</label>
-                <select>
-                    <option>2024</option>
-                    <option>2025</option>
+                <select name="tahun_kurikulum">
+                    <option value="">Semua</option>
+                    @foreach ($tahunList as $tahun)
+                        <option value="{{ $tahun }}" {{ request('tahun_kurikulum') == $tahun ? 'selected' : '' }}>
+                            {{ $tahun }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
+
             <div class="filter-row">
                 <label>Semester</label>
-                <select>
-                    <option>Semua Semester</option>
-                    @for ($i = 1; $i <= 8; $i++)
-                        <option>Semester {{ $i }}</option>
-                    @endfor
+                <select name="semester">
+                    <option value="">Semua</option>
+                    @foreach ($semesterList as $semester)
+                        <option value="{{ $semester }}" {{ request('semester') == $semester ? 'selected' : '' }}>
+                            Semester {{ $semester }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
-            <button class="mk-apply-btn">Apply</button>
-        </div>
+
+            <button type="submit" class="mk-apply-btn">
+                Apply
+            </button>
+        </form>
 
         <div class="mk-info-box">
             <strong>INFO !!!</strong><br>
@@ -70,16 +80,26 @@
                             ['BBK1JAB3', 'SISTEM BASIS DATA', 2, 'Wajib'],
                         ];
                     @endphp
-                    @foreach ($rpsData as $i => $rps)
+                    @forelse ($rpsList as $index => $mk)
                         <tr>
-                            <td>{{ $i + 1 }}</td>
-                            <td>{{ $rps[0] }}</td>
-                            <td>{{ $rps[1] }}</td>
-                            <td>{{ $rps[2] }}</td>
-                            <td>{{ $rps[3] }}</td>
-                            <td><a href="#" class="btn btn-sm btn-secondary">Lihat RPS</a></td>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $mk->kode_mk }}</td>
+                            <td>{{ $mk->nama_matakuliah }}</td>
+                            <td>{{ $mk->semester }}</td>
+                            <td>Wajib</td>
+                            <td>
+                                <button type="button" class="btn-detail">
+                                    Lihat RPS
+                                </button>
+                            </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="6" style="text-align:center;">
+                                Tidak ada data RPS untuk filter yang dipilih.
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

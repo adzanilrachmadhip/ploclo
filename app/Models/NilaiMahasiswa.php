@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Mahasiswa;
+use App\Models\AssessmentTool;
 use Illuminate\Database\Eloquent\Model;
 
 class NilaiMahasiswa extends Model

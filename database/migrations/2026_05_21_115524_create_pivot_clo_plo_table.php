@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('id_plo')
                 ->constrained('data_plo', 'id_plo')
                 ->cascadeOnDelete();
-            $table->decimal('percentage_weight', 5, 2)->nullable();
+
             $table->timestamps();
+            $table->unique(['id_clo', 'id_plo']);
         });
     }
 

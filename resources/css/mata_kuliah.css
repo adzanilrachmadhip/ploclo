@@ -40,12 +40,20 @@
 
 .mk-apply-btn {
     float: right;
-    width: 76px;
-    height: 34px;
+    width: 140px;
+    height: 38px;
     background: #E2D2FF;
     border: 1px solid #aaa;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 12px;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
 }
 
 .mk-info-box {
@@ -138,7 +146,13 @@
 }
 
 .btn-detail {
-    background: #7B8794;
+    background: #D8C2FF;
+    border-color: #D8C2FF;
+    color: #000000;
+}
+
+.btn-detail:hover {
+    background: #D8C2FF;
 }
 
 @media (max-width: 768px) {
@@ -158,6 +172,9 @@
     .mk-apply-btn {
         float: none;
         margin-top: 8px;
+        width: 100%;
+        max-width: 320px;
+        justify-content: center;
     }
 
     .mk-table-top {
@@ -1165,3 +1182,452 @@
     }
 }
 
+/* Page kelola mk u/ kaprodi& admin */
+
+.mk-page-kelola {
+    width: 100%;
+    min-height: calc(100vh - 70px);
+    padding: 28px 32px 56px;
+    background: #F4F4F6;
+    font-family: 'Oxygen', sans-serif;
+}
+
+.mk-page-kelola .mk-title-bar {
+    width: 100%;
+    min-height: 34px;
+    border-radius: 4px;
+    background: #D9C2FF;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    margin-bottom: 28px;
+}
+
+.mk-page-kelola .mk-title-bar p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: #383838;
+}
+
+.mk-filter-kelola {
+    width: 520px;
+    margin-bottom: 22px;
+}
+
+.mk-filter-row-kelola {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 14px;
+}
+
+.mk-filter-row-kelola label {
+    margin: 0;
+    font-size: 14px;
+    color: #222222;
+}
+
+.mk-filter-row-kelola select,
+.mk-filter-row-kelola input {
+    width: 100%;
+    height: 32px;
+    border-radius: 5px;
+    border: 1px solid #B5B5B5;
+    background: #D9D9D9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+    padding: 0 12px;
+    font-size: 13px;
+    color: #222222;
+}
+
+.mk-filter-row-kelola input {
+    background: #FFFFFF;
+    box-shadow: none;
+}
+
+.mk-filter-action-kelola {
+    display: flex;
+    justify-content: flex-end;
+    padding-left: 168px;
+    margin-top: 4px;
+}
+
+.mk-btn-apply-kelola {
+    min-width: 76px;
+    height: 34px;
+    background: #E2D2FF;
+    border: 1px solid #AAA;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #000000;
+    cursor: pointer;
+}
+
+.mk-info-box-kelola {
+    width: 100%;
+    min-height: 58px;
+    background: #FFFBE6;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 26px 0 24px;
+    font-size: 14px;
+    color: #333333;
+}
+
+.mk-add-area-kelola {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 14px;
+}
+
+.mk-btn-add-kelola {
+    min-width: 154px;
+    min-height: 42px;
+    background: #E2D2FF;
+    border: 1px solid #AAA;
+    border-radius: 4px;
+    color: #000000;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.25;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: normal;
+    text-align: center;
+}
+
+.mk-btn-add-kelola span {
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.mk-table-toolbar-kelola {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 14px;
+}
+
+.mk-record-kelola {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #111111;
+}
+
+.record-box-kelola {
+    display: inline-block;
+    width: 28px;
+    height: 18px;
+    border: 1px solid #888888;
+    background: #E5E5E5;
+}
+
+.mk-search-table-kelola {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mk-search-table-kelola label {
+    margin: 0;
+    font-size: 10px;
+    color: #111111;
+}
+
+.mk-search-table-kelola input {
+    width: 150px;
+    height: 22px;
+    border: 1px solid #777777;
+    background: #FFFFFF;
+    padding: 2px 8px;
+    font-size: 11px;
+}
+
+.mk-table-wrapper-kelola {
+    width: 100%;
+    overflow-x: auto;
+    background: #FFFFFF;
+}
+
+.mk-table-kelola {
+    width: 100%;
+    min-width: 1080px;
+    border-collapse: collapse;
+    background: #FFFFFF;
+}
+
+.mk-table-kelola th,
+.mk-table-kelola td {
+    border: 1px solid #CFCFCF;
+    padding: 12px 14px;
+    font-size: 12px;
+    vertical-align: middle;
+    color: #111111;
+}
+
+.mk-table-kelola th {
+    background: #F3F3F3;
+    text-align: center;
+    font-weight: 700;
+}
+
+.mk-table-kelola td:nth-child(1),
+.mk-table-kelola td:nth-child(2),
+.mk-table-kelola td:nth-child(4),
+.mk-table-kelola td:nth-child(5),
+.mk-table-kelola td:nth-child(6),
+.mk-table-kelola td:nth-child(7),
+.mk-table-kelola td:nth-child(8) {
+    text-align: center;
+}
+
+.mk-table-kelola td:nth-child(3) {
+    text-align: left;
+}
+
+.action-group-kelola {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+}
+
+.action-group-kelola form {
+    margin: 0;
+}
+
+.mk-action-btn-kelola {
+    min-width: 70px;
+    min-height: 20px;
+    border: none;
+    border-radius: 3px;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 7px;
+    line-height: 1.1;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.mk-action-btn-kelola.edit,
+.mk-action-btn-kelola.manage {
+    background: #F0A143;
+}
+
+.mk-action-btn-kelola.delete {
+    background: #E74C3C;
+}
+
+.mk-alert-success-text {
+    width: 100%;
+    min-height: 34px;
+    border-radius: 4px;
+    background: #DDEED7;
+    color: #1F6B2A;
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+    .mk-page-kelola {
+        padding: 20px 16px 40px;
+    }
+
+    .mk-filter-kelola {
+        width: 100%;
+    }
+
+    .mk-filter-row-kelola {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .mk-filter-action-kelola {
+        padding-left: 0;
+        justify-content: flex-start;
+    }
+
+    .mk-table-toolbar-kelola {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .mk-add-area-kelola {
+        justify-content: flex-start;
+    }
+}
+
+/* button edit MK */
+.edit-manage-plo-modal {
+    width: 540px;
+    max-width: calc(100vw - 32px);
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.28);
+    overflow: hidden;
+}
+
+.edit-manage-plo-header {
+    height: 52px;
+    padding: 0 18px;
+    border-bottom: 1px solid #D8D8D8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.edit-manage-plo-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 400;
+    color: #222222;
+}
+
+.edit-manage-plo-header button {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    line-height: 1;
+    color: #777777;
+    cursor: pointer;
+}
+
+.edit-manage-plo-body {
+    padding: 28px 26px 34px;
+}
+
+.edit-manage-plo-info {
+    width: 100%;
+    min-height: 96px;
+    background: #FFFBEA;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 26px;
+    font-size: 20px;
+    color: #333333;
+}
+
+.edit-manage-plo-row {
+    display: grid;
+    grid-template-columns: 155px 1fr;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 26px;
+}
+
+.edit-manage-plo-row label {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: #222222;
+}
+
+.edit-manage-plo-row select {
+    width: 100%;
+    height: 34px;
+    border: none;
+    border-radius: 4px;
+    background: #F2F2F2;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #222222;
+    outline: none;
+}
+
+.edit-manage-plo-footer {
+    min-height: 68px;
+    padding: 14px 22px;
+    border-top: 1px solid #D8D8D8;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-edit-cancel,
+.btn-edit-save {
+    border: none;
+    border-radius: 4px;
+    min-width: 62px;
+    height: 34px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.btn-edit-cancel {
+    background: #5E5E5E;
+}
+
+.btn-edit-save {
+    background: #2D79B8;
+}
+
+/* Switch status aktif PLO */
+.plo-switch {
+    position: relative;
+    width: 64px;
+    height: 36px;
+    display: inline-block;
+}
+
+.plo-switch input {
+    display: none;
+}
+
+.plo-slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background: #CFCFCF;
+    border-radius: 999px;
+    transition: 0.25s ease;
+}
+
+.plo-slider::before {
+    content: "";
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    left: 4px;
+    top: 4px;
+    background: #FFFFFF;
+    border-radius: 50%;
+    transition: 0.25s ease;
+}
+
+.plo-switch input:checked + .plo-slider {
+    background: #2D79B8;
+}
+
+.plo-switch input:checked + .plo-slider::before {
+    transform: translateX(28px);
+}
+
+@media (max-width: 576px) {
+    .edit-manage-plo-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .edit-manage-plo-info {
+        font-size: 16px;
+    }
+}
