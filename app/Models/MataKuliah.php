@@ -15,6 +15,8 @@ class MataKuliah extends Model
         'sks',
         'semester',
         'tahun_kurikulum',
+        'jenis_mata_kuliah',
+        'file_rps',
     ];
 
     public function clos()

@@ -127,17 +127,38 @@
 .action-group {
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    align-items: flex-start;
+    gap: 5px;
+    align-items: center;
 }
 
-.action-group button {
+.action-group form {
+    margin: 0;
+    width: 78px;
+    display: flex;
+}
+
+.action-group button,
+.action-group a {
+    width: 78px;
+    height: 22px;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     color: white;
     font-size: 10px;
-    padding: 2px 6px;
-    line-height: 1.1;
+    font-weight: 600;
+    padding: 0;
+    line-height: 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.action-group form button {
+    width: 100%;
 }
 
 .btn-edit,
@@ -145,14 +166,30 @@
     background: #F0A143;
 }
 
-.btn-detail {
+.btn-detail,
+.rps-view-btn {
+    width: 78px;
+    height: 28px;
+    border: none;
+    border-radius: 4px;
     background: #D8C2FF;
-    border-color: #D8C2FF;
     color: #000000;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 0;
+    line-height: 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
-.btn-detail:hover {
+.btn-detail:hover,
+.rps-view-btn:hover {
     background: #D8C2FF;
+    color: #000000;
 }
 
 @media (max-width: 768px) {
@@ -545,6 +582,22 @@
     display: flex;
     align-items: center;
     padding: 0 14px;
+}
+
+.edit-rps-select,
+.edit-rps-file {
+    width: 100%;
+    min-height: 40px;
+    border: 1px solid #8B8B8B;
+    background: #FFFFFF;
+    padding: 8px 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.rps-empty-text {
+    font-size: 11px;
+    color: #777777;
 }
 
 .edit-code-text {
@@ -1397,29 +1450,37 @@
 .action-group-kelola {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    align-items: flex-start;
+    gap: 5px;
+    align-items: center;
 }
 
 .action-group-kelola form {
     margin: 0;
+    width: 78px;
+    display: flex;
 }
 
 .mk-action-btn-kelola {
-    min-width: 70px;
-    min-height: 20px;
+    width: 78px;
+    height: 22px;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     color: #FFFFFF;
     font-size: 10px;
     font-weight: 600;
-    padding: 3px 7px;
-    line-height: 1.1;
+    padding: 0;
+    line-height: 22px;
+    text-align: center;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
     cursor: pointer;
+}
+
+.action-group-kelola form .mk-action-btn-kelola {
+    width: 100%;
 }
 
 .mk-action-btn-kelola.edit,

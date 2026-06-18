@@ -90,29 +90,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/mahasiswa/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
     Route::delete('/mahasiswa/{id}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
 
-    Route::get('/rps', function (\Illuminate\Http\Request $request) {
-        $query = \App\Models\MataKuliah::query();
-        if ($request->filled('tahun_kurikulum')) {
-            $query->where('tahun_kurikulum', $request->tahun_kurikulum);}
-        if ($request->filled('semester')) {
-            $query->where('semester', $request->semester);}
+    Route::get('/rps', [MataKuliahController::class, 'rpsIndex'])
+        ->name('rps.index');
 
-        $rpsList = $query
-            ->orderBy('semester')
-            ->orderBy('kode_mk')
-            ->get();
+    Route::put('/rps/{id}', [MataKuliahController::class, 'updateRps'])
+        ->name('rps.update');
 
-        $tahunList = \App\Models\MataKuliah::select('tahun_kurikulum')
-            ->distinct()
-            ->orderBy('tahun_kurikulum', 'desc')
-            ->pluck('tahun_kurikulum');
-
-        $semesterList = \App\Models\MataKuliah::select('semester')
-            ->distinct()
-            ->orderBy('semester')
-            ->pluck('semester');
-
-        return view('rps.index_nw', compact('rpsList', 'tahunList', 'semesterList'));})->name('rps.index');
+    Route::delete('/rps/{id}/file', [MataKuliahController::class, 'deleteRpsFile'])
+        ->name('rps.file.delete');
 });
 
 // JWT API routes
