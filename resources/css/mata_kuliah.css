@@ -12,29 +12,155 @@
     margin-bottom: 28px;
 }
 
+/* === TOOLBAR: filter kiri + tombol tambah kanan === */
+.mk-toolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.mk-filter-inline {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.mk-filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.mk-filter-item label {
+    font-size: 12px;
+    color: #555;
+    font-weight: 500;
+}
+
+.mk-filter-item select,
+.mk-filter-item input[type="text"] {
+    height: 34px;
+    min-width: 160px;
+    border-radius: 5px;
+    border: 1px solid #B5B5B5;
+    background: #fff;
+    padding: 0 10px;
+    font-size: 13px;
+}
+
+.btn-apply {
+    height: 34px;
+    padding: 0 18px;
+    background: #E2D2FF;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-apply:hover {
+    background: #d0baff;
+}
+
+.btn-primary-action {
+    height: 36px;
+    padding: 0 18px;
+    background: #6C47D6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.btn-primary-action:hover {
+    background: #5539b8;
+}
+
+.mk-count {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 12px;
+}
+
+/* === ACTION ROW (horizontal buttons in table) === */
+.action-row {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    display: inline-block;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 11px;
+    padding: 4px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.btn-action.btn-edit {
+    background: #F0A143;
+}
+
+.btn-action.btn-manage {
+    background: #3A7BC8;
+}
+
+.btn-action.btn-danger {
+    background: #e74c3c;
+}
+
+.btn-action:hover {
+    opacity: 0.87;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* === legacy filter-row (mahasiswa page still uses this) === */
 .mk-filter {
-    width: 520px;
-    margin-bottom: 36px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 16px;
 }
 
 .filter-row {
-    display: grid;
-    grid-template-columns: 170px 1fr;
-    align-items: center;
-    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .filter-row label {
-    font-size: 14px;
+    font-size: 12px;
+    color: #555;
 }
 
-.filter-row select {
-    height: 30px;
+.filter-row select,
+.filter-row input[type="text"] {
+    height: 34px;
+    min-width: 150px;
     border-radius: 5px;
     border: 1px solid #B5B5B5;
-    background: #D9D9D9;
-    box-shadow: 0 2px 4px rgba(0,0,0,.25);
-    padding: 0 12px;
+    background: #fff;
+    padding: 0 10px;
     font-size: 13px;
 }
 
@@ -54,15 +180,23 @@
     font-size: 13px;
     line-height: 1;
     cursor: pointer;
+    height: 34px;
+    padding: 0 16px;
+    background: #E2D2FF;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
 .mk-info-box {
-    clear: both;
     background: #FFFBE6;
-    height: 58px;
     padding: 12px;
-    margin: 42px 0 34px;
+    margin-bottom: 16px;
     font-size: 14px;
+    border-radius: 4px;
 }
 
 .mk-table-top {
@@ -159,6 +293,25 @@
 
 .action-group form button {
     width: 100%;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-group button,
+.action-group a {
+    display: inline-block;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 11px;
+    padding: 4px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1.4;
+    white-space: nowrap;
+
 }
 
 .btn-edit,
@@ -199,6 +352,7 @@
 
     .mk-filter {
         width: 100%;
+        flex-direction: column;
     }
 
     .filter-row {
@@ -219,6 +373,32 @@
         align-items: flex-start;
         gap: 10px;
     }
+
+    .mk-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .mk-filter-inline {
+        flex-direction: column;
+    }
+
+    .btn-primary-action {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.btn-edit {
+    background: #F0A143;
+}
+
+.btn-manage {
+    background: #3A7BC8;
+}
+
+.btn-detail {
+    background: #7B8794;
 }
 
 .submenu {
@@ -293,7 +473,7 @@
     background: #ECECEC;
     padding: 0 12px;
     font-size: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .mk-info-box {
@@ -443,9 +623,7 @@
     color: white;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* RESPONSIVE*/
 
 @media (max-width: 768px) {
 
@@ -674,11 +852,11 @@
     transition: 0.3s;
 }
 
-.switch input:checked + .slider {
+.switch input:checked+.slider {
     background: #2D79B8;
 }
 
-.switch input:checked + .slider::before {
+.switch input:checked+.slider::before {
     transform: translateX(28px);
 }
 
@@ -755,11 +933,11 @@
     transition: 0.3s;
 }
 
-.switch input:checked + .slider {
+.switch input:checked+.slider {
     background: #2D79B8;
 }
 
-.switch input:checked + .slider::before {
+.switch input:checked+.slider::before {
     transform: translateX(28px);
 }
 
@@ -796,7 +974,7 @@
     background: white;
     border-radius: 12px;
     padding: 20px 20px 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
 }
 
 .detail-header {
@@ -1236,7 +1414,6 @@
 }
 
 /* Page kelola mk u/ kaprodi& admin */
-
 .mk-page-kelola {
     width: 100%;
     min-height: calc(100vh - 70px);
@@ -1674,11 +1851,11 @@
     transition: 0.25s ease;
 }
 
-.plo-switch input:checked + .plo-slider {
+.plo-switch input:checked+.plo-slider {
     background: #2D79B8;
 }
 
-.plo-switch input:checked + .plo-slider::before {
+.plo-switch input:checked+.plo-slider::before {
     transform: translateX(28px);
 }
 
@@ -1691,4 +1868,136 @@
     .edit-manage-plo-info {
         font-size: 16px;
     }
+}
+
+/* DETAIL MATA KULIAH MODAL*/
+
+.btn-detail-mk {
+    background: #5C6BC0;
+}
+
+.detail-clo-card {
+    border: 1px solid #E8E8F0;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 18px;
+    background: #FAFAFE;
+}
+
+.detail-clo-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.detail-clo-badge {
+    background: #7C5CBF;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.detail-clo-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2C2C2C;
+}
+
+.detail-clo-desc {
+    font-size: 12px;
+    color: #666;
+    margin: 4px 0 10px;
+    line-height: 1.5;
+}
+
+.detail-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.detail-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.detail-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.detail-chip-plo {
+    background: #EDE9FF;
+    color: #5C3FBF;
+    border: 1px solid #C9BBFF;
+}
+
+.chip-weight {
+    background: #C9BBFF;
+    color: #3D2494;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+}
+
+.detail-at-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.detail-at-table th {
+    background: #F0EAF8;
+    color: #4A4A4A;
+    font-weight: 600;
+    padding: 7px 12px;
+    text-align: left;
+    border-bottom: 1px solid #DDD;
+}
+
+.detail-at-table td {
+    padding: 7px 12px;
+    border-bottom: 1px solid #EFEFEF;
+    color: #333;
+}
+
+.detail-at-table tfoot td {
+    background: #F7F4FF;
+    font-size: 13px;
+    border-top: 2px solid #DDD;
+}
+
+.detail-weight-badge {
+    display: inline-block;
+    background: #E9F5E9;
+    color: #2E7D32;
+    border: 1px solid #A5D6A7;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+}
+
+.detail-bobot-ok {
+    color: #2E7D32;
+    font-weight: 700;
+}
+
+.detail-bobot-warn {
+    color: #E65100;
+    font-weight: 700;
 }

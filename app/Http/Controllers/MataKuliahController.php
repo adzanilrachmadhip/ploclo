@@ -23,7 +23,8 @@ class MataKuliahController extends Controller
             });
         }
 
-        $matkul = $query->orderBy('semester')->orderBy('kode_mk')->get();
+        $matkul = $query->with(['clos.assessmentTools', 'clos.plos'])
+                        ->orderBy('semester')->orderBy('kode_mk')->get();
         $tahunList = MataKuliah::select('tahun_kurikulum')->distinct()->orderBy('tahun_kurikulum', 'desc')->pluck('tahun_kurikulum');
 
         return view('mata-kuliah.index', compact('matkul', 'tahunList'));
