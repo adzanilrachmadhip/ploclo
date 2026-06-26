@@ -21,7 +21,7 @@
                     <h1>COMPASS</h1>
                     <h2>
                         Curriculum Outcomes Mapping,<br>
-                        Performances and ASsesment Systems
+                        Performances and Assesment Systems
                     </h2>
                 </div>
 
