@@ -12,11 +12,20 @@
         <div class="mk-title">Manage CLO & Mapping PLO</div>
 
         @if (session('success'))
-            <div class="mk-alert-success" style="display:block;">{{ session('success') }}</div>
+            <div class="toast-alert toast-success">
+                <span class="toast-icon">✓</span>
+                <span class="toast-msg">{{ session('success') }}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            </div>
         @endif
         @if (session('error'))
-            <div class="mk-alert-success" style="display:block;background:#f8d7da;color:#721c24;border-color:#f5c6cb;">{{ session('error') }}</div>
+            <div class="toast-alert toast-error">
+                <span class="toast-icon">!</span>
+                <span class="toast-msg">{{ session('error') }}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            </div>
         @endif
+        
 
         {{-- Filter: pilih MK --}}
         <form method="GET" action="{{ route('mata-kuliah.manage-plo.ui') }}" class="mk-filter">

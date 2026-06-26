@@ -13,7 +13,18 @@
     <div class="mk-title">Kelola Mata Kuliah</div>
 
     @if (session('success'))
-        <div class="mk-alert-success" style="display:block;height:auto;padding:10px 16px;">{{ session('success') }}</div>
+        <div class="toast-alert toast-success">
+            <span class="toast-icon">✓</span>
+            <span class="toast-msg">{{ session('success') }}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="toast-alert toast-error">
+            <span class="toast-icon">!</span>
+            <span class="toast-msg">{{ session('error') }}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        </div>
     @endif
 
     {{-- Toolbar: filter kiri, tombol kanan --}}

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mahasiswa;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -56,18 +58,50 @@ class UserController extends Controller
             'nidn'         => 'nullable|string|max:20',
         ]);
 
-        $user->update([
-            'username'     => $validated['username'],
-            'name'         => $validated['nama_lengkap'],
-            'nama_lengkap' => $validated['nama_lengkap'],
-            'email'        => $validated['email'] ?? null,
-            'role'         => $validated['role'],
-            'kode_dosen'   => $validated['role'] === 'dosen wali' ? strtoupper($validated['kode_dosen'] ?? '') : null,
-            'nip'          => $validated['nip'] ?? null,
-            'nidn'         => $validated['nidn'] ?? null,
-        ]);
+        $newRole      = $validated['role'];
+        $oldKodeDosen = $user->kode_dosen;
+        $newKodeDosen = $newRole === 'dosen wali'
+            ? strtoupper($validated['kode_dosen'] ?? '')
+            : null;
 
-        return back()->with('success', "User '{$user->username}' berhasil diperbarui.");
+        // Cek kaprodi aktif — hanya boleh ada 1
+        if ($newRole === 'kaprodi') {
+            $existingKaprodi = User::where('role', 'kaprodi')
+                                   ->where('id_user', '!=', $id)
+                                   ->first();
+            if ($existingKaprodi) {
+                return back()->with(
+                    'error',
+                    "Terdapat kaprodi aktif ({$existingKaprodi->nama_lengkap}). Nonaktifkan kaprodi lama terlebih dahulu."
+                );
+            }
+        }
+
+        DB::transaction(function () use ($user, $validated, $newRole, $newKodeDosen, $oldKodeDosen) {
+            // Jika kode_dosen akan di-null dan ada mahasiswa yang masih referencing,
+            // putus relasi mahasiswa dulu agar FK tidak error
+            if ($oldKodeDosen && $newKodeDosen === null) {
+                Mahasiswa::where('kode_dosen', $oldKodeDosen)
+                         ->update(['kode_dosen' => null]);
+            }
+
+            $user->update([
+                'username'     => $validated['username'],
+                'name'         => $validated['nama_lengkap'],
+                'nama_lengkap' => $validated['nama_lengkap'],
+                'email'        => $validated['email'] ?? null,
+                'role'         => $newRole,
+                'kode_dosen'   => $newKodeDosen,
+                'nip'          => $validated['nip'] ?? null,
+                'nidn'         => $validated['nidn'] ?? null,
+            ]);
+        });
+
+        $extra = ($oldKodeDosen && $newKodeDosen === null)
+            ? ' Mahasiswa yang sebelumnya dibimbing telah dilepas dari dosen ini.'
+            : '';
+
+        return back()->with('success', "{$user->nama_lengkap} berhasil diperbarui.{$extra}");
     }
 
     public function resetPassword(int $id)

@@ -12,11 +12,18 @@
         <div class="mk-title">Manajemen User</div>
 
         @if (session('success'))
-            <div class="mk-alert-success" style="display:block;">{{ session('success') }}</div>
+            <div class="toast-alert toast-success" id="toastAlert">
+                <span class="toast-icon">✓</span>
+                <span class="toast-msg">{{ session('success') }}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            </div>
         @endif
         @if (session('error'))
-            <div class="mk-alert-success" style="display:block;background:#f8d7da;color:#721c24;border-color:#f5c6cb;">
-                {{ session('error') }}</div>
+            <div class="toast-alert toast-error" id="toastAlert">
+                <span class="toast-icon">!</span>
+                <span class="toast-msg">{{ session('error') }}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            </div>
         @endif
 
         @if (auth()->user()->isAdmin() || auth()->user()->isKaprodi())

@@ -12,6 +12,81 @@
     margin-bottom: 28px;
 }
 
+/* ================================================
+   TOAST ALERT — modern minimalist
+================================================ */
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.toast-alert {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13.5px;
+    font-weight: 500;
+    animation: toastIn 0.22s ease;
+    border-left: 4px solid transparent;
+}
+
+.toast-success {
+    background: #F0FBF4;
+    border-left-color: #2ECC71;
+    color: #1A5E36;
+}
+
+.toast-error {
+    background: #FFF5F5;
+    border-left-color: #E53E3E;
+    color: #7B1C1C;
+}
+
+.toast-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.toast-success .toast-icon {
+    background: #2ECC71;
+    color: #fff;
+}
+
+.toast-error .toast-icon {
+    background: #E53E3E;
+    color: #fff;
+}
+
+.toast-msg {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    color: inherit;
+    opacity: 0.45;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.toast-close:hover { opacity: 0.85; }
+
 /* === TOOLBAR: filter kiri + tombol tambah kanan === */
 .mk-toolbar {
     display: flex;
