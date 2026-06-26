@@ -13,7 +13,10 @@ class PloController extends Controller
     // Global PLO list + CRUD
     public function index()
     {
-        $plos = Plo::withCount('clos')->orderBy('nama_plo')->get();
+        $plos = Plo::withCount('clos')
+                   ->with(['clos' => fn($q) => $q->with('mataKuliah')->orderBy('id_mk')])
+                   ->orderBy('nama_plo')
+                   ->get();
         return view('plo.index_nw', compact('plos'));
     }
 

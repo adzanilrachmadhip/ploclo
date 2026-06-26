@@ -234,7 +234,7 @@
 
                 const ploChips = plos.length
                     ? plos.map(p =>
-                        `<span class="detail-chip detail-chip-plo" title="${p.description_plo ?? ''}">${p.nama_plo} <span class="chip-weight">${p.pivot.percentage_weight}%</span></span>`
+                        `<span class="detail-chip detail-chip-plo" title="${p.description_plo ?? ''}">${p.nama_plo}</span>`
                       ).join('')
                     : '<span style="color:#bbb;font-size:12px;">—</span>';
 

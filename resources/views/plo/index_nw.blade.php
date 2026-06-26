@@ -37,17 +37,20 @@
                             <td style="max-width:400px;white-space:normal;">{{ $plo->description_plo }}</td>
                             <td>{{ $plo->clos_count }}</td>
                             <td>
-                                <div class="action-group">
-                                    <button type="button" class="btn-edit"
+                                <div class="action-row">
+                                    <button type="button" class="btn-action btn-detail-mk"
+                                        onclick="openDetailPlo({{ $plo->id_plo }})">
+                                        Detail
+                                    </button>
+                                    <button type="button" class="btn-action btn-edit"
                                         onclick="openEditPloModal({{ $plo->id_plo }}, '{{ $plo->nama_plo }}', '{{ addslashes($plo->description_plo) }}')">
                                         Edit
                                     </button>
                                     <form method="POST" action="{{ route('plo.destroy', $plo->id_plo) }}"
                                         style="display:inline;"
                                         onsubmit="return confirm('Hapus {{ $plo->nama_plo }}? Semua mapping CLO-PLO juga akan terhapus.')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-detail" style="background:#e74c3c;color:#fff;">Hapus</button>
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn-action btn-danger">Hapus</button>
                                     </form>
                                 </div>
                             </td>
@@ -62,6 +65,27 @@
             <button type="button" class="btn-tambah-plo-bawah" onclick="openAddPloModal()">
                 Tambah PLO
             </button>
+        </div>
+
+        {{-- MODAL DETAIL PLO --}}
+        <div id="detailPloModal" class="modal-overlay">
+            <div class="dplo-modal">
+                {{-- Header: PLO info di kiri, close di kanan --}}
+                <div class="dplo-modal-header">
+                    <div class="dplo-header-left">
+                        <span id="dplo-title" class="dplo-title-badge"></span>
+                        <p id="dplo-desc" class="dplo-header-desc"></p>
+                    </div>
+                    <button type="button" onclick="closeDetailPlo()" class="dplo-close">×</button>
+                </div>
+                {{-- Body: label + grid konten --}}
+                <div class="dplo-modal-body">
+                    <div class="detail-section-label" style="margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #EEEAF8;">
+                        CLO yang dipetakan ke PLO ini
+                    </div>
+                    <div id="dplo-body"></div>
+                </div>
+            </div>
         </div>
 
         {{-- MODAL TAMBAH PLO --}}
@@ -126,6 +150,60 @@
 
 @section('scripts')
     <script>
+        const ploData = @json($plos->keyBy('id_plo'));
+
+        // ── Detail PLO modal ─────────────────────────────────────────
+        function openDetailPlo(id) {
+            const plo  = ploData[id];
+            if (!plo) return;
+
+            document.getElementById('dplo-title').textContent = plo.nama_plo;
+            document.getElementById('dplo-desc').textContent  = plo.description_plo ?? '';
+
+            const body = document.getElementById('dplo-body');
+            body.innerHTML = '';
+
+            const clos = plo.clos ?? [];
+            if (clos.length === 0) {
+                body.innerHTML = '<p style="color:#aaa;text-align:center;padding:20px 0;">Belum ada CLO yang dipetakan ke PLO ini.</p>';
+            } else {
+                // Group by mata kuliah
+                const byMk = {};
+                clos.forEach(clo => {
+                    const mkNama = clo.mata_kuliah ? clo.mata_kuliah.nama_matakuliah : 'Tanpa Mata Kuliah';
+                    const mkKode = clo.mata_kuliah ? clo.mata_kuliah.kode_mk : '-';
+                    const key    = mkKode;
+                    if (!byMk[key]) byMk[key] = { kode: mkKode, nama: mkNama, clos: [] };
+                    byMk[key].clos.push(clo);
+                });
+
+                Object.values(byMk).forEach(mk => {
+                        const rows = mk.clos.map((clo, idx) => `
+                        <div class="dplo-clo-row">
+                            <span class="dplo-clo-num">${idx + 1}</span>
+                            <div class="dplo-clo-info">
+                                <span class="dplo-clo-badge">${clo.nama_clo}</span>
+                                <p class="dplo-clo-desc">${clo.description_clo ?? '-'}</p>
+                            </div>
+                        </div>`).join('');
+
+                    body.insertAdjacentHTML('beforeend', `
+                        <div class="dplo-mk-block">
+                            <div class="dplo-mk-header">
+                                <span class="dplo-mk-tag">MK</span>
+                                <span class="dplo-mk-name">${mk.kode} — ${mk.nama}</span>
+                            </div>
+                            <div class="dplo-clo-grid">${rows}</div>
+                        </div>`);
+                });
+            }
+
+            document.getElementById('detailPloModal').classList.add('show');
+        }
+
+        function closeDetailPlo() { document.getElementById('detailPloModal').classList.remove('show'); }
+
+        // ── Add / Edit PLO modals ─────────────────────────────────────
         function openAddPloModal()  { document.getElementById('addPloModal').classList.add('show'); }
         function closeAddPloModal() { document.getElementById('addPloModal').classList.remove('show'); }
 
