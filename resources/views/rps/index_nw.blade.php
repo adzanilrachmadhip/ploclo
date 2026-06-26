@@ -56,7 +56,8 @@
                 <input type="hidden" name="semester" value="{{ request('semester') }}">
 
                 <label>Search (Press Enter):</label>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Kode / Nama MK" onkeydown="if(event.key === 'Enter') this.form.submit();">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Kode / Nama MK"
+                    onkeydown="if(event.key === 'Enter') this.form.submit();">
             </form>
         </div>
 
@@ -91,32 +92,35 @@
                                 @endif
                             </td>
 
-                            <td>
-                                <div class="action-group-kelola">
-                                    <button type="button" class="mk-action-btn-kelola edit"
-                                        onclick="openEditRpsModal(this)" data-id="{{ $mk->id_mk }}"
-                                        data-kode="{{ $mk->kode_mk }}" data-nama="{{ $mk->nama_matakuliah }}"
-                                        data-tahun="{{ $mk->tahun_kurikulum }}" data-semester="{{ $mk->semester }}"
-                                        data-jenis="{{ $mk->jenis_mata_kuliah ?? 'Wajib' }}"
-                                        data-update-url="{{ route('rps.update', $mk->id_mk) }}">
-                                        Edit
-                                    </button>
-
-                                    <form method="POST" action="{{ route('rps.file.delete', $mk->id_mk) }}"
-                                        onsubmit="return confirm('Yakin ingin menghapus dokumen RPS mata kuliah ini?')">
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit" class="mk-action-btn-kelola delete">
-                                            Hapus
+                            @if (auth()->user()->isAdmin())
+                                <td>
+                                    <div class="action-group-kelola">
+                                        <button type="button" class="mk-action-btn-kelola edit"
+                                            onclick="openEditRpsModal(this)" data-id="{{ $mk->id_mk }}"
+                                            data-kode="{{ $mk->kode_mk }}" data-nama="{{ $mk->nama_matakuliah }}"
+                                            data-tahun="{{ $mk->tahun_kurikulum }}" data-semester="{{ $mk->semester }}"
+                                            data-jenis="{{ $mk->jenis_mata_kuliah ?? 'Wajib' }}"
+                                            data-update-url="{{ route('rps.update', $mk->id_mk) }}">
+                                            Edit
                                         </button>
-                                    </form>
-                                </div>
-                            </td>
+
+                                        <form method="POST" action="{{ route('rps.file.delete', $mk->id_mk) }}"
+                                            onsubmit="return confirm('Yakin ingin menghapus dokumen RPS mata kuliah ini?')">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="mk-action-btn-kelola delete">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            @endif
+
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" style="text-align:center;">
+                            <td colspan="{{ auth()->user()->isAdmin() ? 7 : 6 }}" style="text-align:center;">
                                 Tidak ada data RPS untuk filter yang dipilih.
                             </td>
                         </tr>
@@ -134,90 +138,95 @@
             <button>Last</button>
         </div>
 
-        <div id="editRpsModal" class="modal-overlay">
-            <div class="edit-mk-modal">
-                <div class="edit-modal-header">
-                    <h3>Edit RPS</h3>
-                    <button type="button" onclick="closeEditRpsModal()">×</button>
+        @if (auth()->user()->isAdmin())
+            <div id="editRpsModal" class="modal-overlay">
+                <div class="edit-mk-modal">
+                    <div class="edit-modal-header">
+                        <h3>Edit RPS</h3>
+                        <button type="button" onclick="closeEditRpsModal()">×</button>
+                    </div>
+
+                    <form id="editRpsForm" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="edit-modal-body">
+                            <div class="edit-field-group">
+                                <label>Kode Mata Kuliah</label>
+                                <div class="edit-field-value">
+                                    <span id="editRpsKode" class="edit-code-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="edit-field-group">
+                                <label>Nama Mata Kuliah</label>
+                                <div class="edit-field-value">
+                                    <span id="editRpsNama" class="edit-code-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="edit-field-group">
+                                <label>Tahun Kurikulum</label>
+                                <div class="edit-field-value">
+                                    <span id="editRpsTahun" class="edit-code-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="edit-field-group">
+                                <label>Semester</label>
+                                <div class="edit-field-value">
+                                    <span id="editRpsSemester" class="edit-code-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="edit-field-group">
+                                <label>Jenis Mata Kuliah</label>
+                                <select id="editRpsJenis" name="jenis_mata_kuliah" class="edit-rps-select">
+                                    <option value="Wajib">Wajib</option>
+                                    <option value="Pilihan">Pilihan</option>
+                                </select>
+                            </div>
+
+                            <div class="edit-field-group">
+                                <label>Dokumen RPS</label>
+                                <input type="file" name="file_rps" accept="application/pdf" class="edit-rps-file">
+                                <small>Format file harus PDF. Kosongkan jika tidak ingin mengganti file.</small>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer-custom modal-footer-edit">
+                            <button type="button" class="btn-cancel" onclick="closeEditRpsModal()">Cancel</button>
+                            <button type="submit" class="btn-save">Simpan</button>
+                        </div>
+                    </form>
                 </div>
-
-                <form id="editRpsForm" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="edit-modal-body">
-                        <div class="edit-field-group">
-                            <label>Kode Mata Kuliah</label>
-                            <div class="edit-field-value">
-                                <span id="editRpsKode" class="edit-code-text"></span>
-                            </div>
-                        </div>
-
-                        <div class="edit-field-group">
-                            <label>Nama Mata Kuliah</label>
-                            <div class="edit-field-value">
-                                <span id="editRpsNama" class="edit-code-text"></span>
-                            </div>
-                        </div>
-
-                        <div class="edit-field-group">
-                            <label>Tahun Kurikulum</label>
-                            <div class="edit-field-value">
-                                <span id="editRpsTahun" class="edit-code-text"></span>
-                            </div>
-                        </div>
-
-                        <div class="edit-field-group">
-                            <label>Semester</label>
-                            <div class="edit-field-value">
-                                <span id="editRpsSemester" class="edit-code-text"></span>
-                            </div>
-                        </div>
-
-                        <div class="edit-field-group">
-                            <label>Jenis Mata Kuliah</label>
-                            <select id="editRpsJenis" name="jenis_mata_kuliah" class="edit-rps-select">
-                                <option value="Wajib">Wajib</option>
-                                <option value="Pilihan">Pilihan</option>
-                            </select>
-                        </div>
-
-                        <div class="edit-field-group">
-                            <label>Dokumen RPS</label>
-                            <input type="file" name="file_rps" accept="application/pdf" class="edit-rps-file">
-                            <small>Format file harus PDF. Kosongkan jika tidak ingin mengganti file.</small>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer-custom modal-footer-edit">
-                        <button type="button" class="btn-cancel" onclick="closeEditRpsModal()">Cancel</button>
-                        <button type="submit" class="btn-save">Simpan</button>
-                    </div>
-                </form>
             </div>
-        </div>
+        @endif
+
     </section>
 @endsection
 
 @section('scripts')
-    <script>
-        function openEditRpsModal(button) {
-            const modal = document.getElementById('editRpsModal');
-            const form = document.getElementById('editRpsForm');
+    @if (auth()->user()->isAdmin())
+        <script>
+            function openEditRpsModal(button) {
+                const modal = document.getElementById('editRpsModal');
+                const form = document.getElementById('editRpsForm');
 
-            form.action = button.dataset.updateUrl;
+                form.action = button.dataset.updateUrl;
 
-            document.getElementById('editRpsKode').textContent = button.dataset.kode || '-';
-            document.getElementById('editRpsNama').textContent = button.dataset.nama || '-';
-            document.getElementById('editRpsTahun').textContent = button.dataset.tahun || '-';
-            document.getElementById('editRpsSemester').textContent = button.dataset.semester || '-';
-            document.getElementById('editRpsJenis').value = button.dataset.jenis || 'Wajib';
+                document.getElementById('editRpsKode').textContent = button.dataset.kode || '-';
+                document.getElementById('editRpsNama').textContent = button.dataset.nama || '-';
+                document.getElementById('editRpsTahun').textContent = button.dataset.tahun || '-';
+                document.getElementById('editRpsSemester').textContent = button.dataset.semester || '-';
+                document.getElementById('editRpsJenis').value = button.dataset.jenis || 'Wajib';
 
-            modal.classList.add('show');
-        }
+                modal.classList.add('show');
+            }
 
-        function closeEditRpsModal() {
-            document.getElementById('editRpsModal').classList.remove('show');
-        }
-    </script>
+            function closeEditRpsModal() {
+                document.getElementById('editRpsModal').classList.remove('show');
+            }
+        </script>
+    @endif
 @endsection
