@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class PloCalculationService
 {
-    public function calculate(int $idMahasiswa): array
+    public function calculate(int $idMahasiswa, array $filters = []): array
     {
         $assessmentScores = DB::table('nilai_mahasiswa')
             ->join('assessment_tools', 'nilai_mahasiswa.id_at', '=', 'assessment_tools.id_at')
@@ -15,6 +15,12 @@ class PloCalculationService
             ->join('pivot_clo_plo', 'data_clo.id_clo', '=', 'pivot_clo_plo.id_clo')
             ->join('data_plo', 'pivot_clo_plo.id_plo', '=', 'data_plo.id_plo')
             ->where('nilai_mahasiswa.id_mahasiswa', $idMahasiswa)
+            ->when(isset($filters['semester']) && $filters['semester'] !== null, function ($q) use ($filters) {
+                return $q->where('mata_kuliah.semester', $filters['semester']);
+            })
+            ->when(isset($filters['tahun_kurikulum']) && $filters['tahun_kurikulum'] !== null, function ($q) use ($filters) {
+                return $q->where('mata_kuliah.tahun_kurikulum', $filters['tahun_kurikulum']);
+            })
             ->select(
                 'data_plo.id_plo', 'data_plo.nama_plo', 'data_plo.description_plo',
                 'data_clo.id_clo', 'data_clo.nama_clo', 'data_clo.description_clo',

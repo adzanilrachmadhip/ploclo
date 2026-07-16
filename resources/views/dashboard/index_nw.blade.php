@@ -9,9 +9,39 @@
 
 @section('content')
     <main class="dashboard-inner">
-        <div class="dashboard-top">
-            <p class="overview-title">Overview</p>
-            <p class="period-text">Tahun : 2425/1 Genap ⌄</p>
+        <div class="dashboard-top" style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
+            <div style="flex:1;">
+                <p class="overview-title">Overview</p>
+            </div>
+
+            <div style="min-width:260px; display:flex; flex-direction:column; align-items:flex-end;">
+                <form method="get" class="filter-form" style="display:flex; flex-direction:column; gap:8px; align-items:flex-end; margin:0; width:100%;">
+                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="opacity:0.9;">Angkatan:</span>
+                        <select name="angkatan" style="width:140px;">
+                            <option value="">Semua</option>
+                            @foreach($availableAngkatan as $ang)
+                                <option value="{{ $ang }}" {{ (string)$ang === (string)$angkatan ? 'selected' : '' }}>{{ $ang }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="opacity:0.9;">Periode:</span>
+                        <select name="periode" style="width:140px;">
+                            <option value="">Semua</option>
+                            @foreach($availablePeriode as $prd)
+                                <option value="{{ $prd }}" {{ (string)$prd === (string)$selectedPeriode ? 'selected' : '' }}>{{ $prd }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div style="display:flex; gap:8px; justify-content:flex-end; width:100%;">
+                        <button type="submit" class="btn">Terapkan</button>
+                        <a href="{{ route('kaprodi.dashboard') }}" class="btn">Reset</a>
+                    </div>
+                </form>
+            </div>
         </div>
 
         @php
@@ -31,7 +61,15 @@
         </div>
 
         <div class="chart-card">
-            <h3>Ketercapaian PLO Angkatan 2024</h3>
+            @php
+                $titleAngkatan = null;
+                if (isset($angkatan) && $angkatan) {
+                    $titleAngkatan = (strlen((string)$angkatan) === 2) ? '20' . $angkatan : $angkatan;
+                } else {
+                    $titleAngkatan = '2024';
+                }
+            @endphp
+            <h3>Ketercapaian PLO Angkatan {{ $titleAngkatan }}</h3>
             <div class="chart-area">
                 <div class="y-axis">
                     <span>75%</span>
