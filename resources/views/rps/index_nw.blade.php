@@ -71,7 +71,9 @@
                         <th>Semester</th>
                         <th>Jenis Mata Kuliah</th>
                         <th>Dokumen RPS</th>
-                        <th>Aksi</th>
+                        @if (auth()->user()->isAdmin())
+                            <th>Aksi</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>

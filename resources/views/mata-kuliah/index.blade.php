@@ -265,7 +265,6 @@
                 body.insertAdjacentHTML('beforeend', `
                 <div class="detail-clo-card">
                     <div class="detail-clo-header">
-                        <span class="detail-clo-badge">CLO ${idx + 1}</span>
                         <span class="detail-clo-name">${clo.nama_clo}</span>
                     </div>
                     ${clo.description_clo ? `<p class="detail-clo-desc">${clo.description_clo}</p>` : ''}
